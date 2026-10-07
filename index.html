@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0612">
+<title>BhuanaKamaya</title>
+<script>
+(function(){
+  var s = document.createElement('script');
+  s.src = 'https://telegram.org/js/telegram-web-app.js';
+  s.async = true;
+  s.onerror = function(){ /* diamkan */ };
+  document.head.appendChild(s);
+})();
+</script>
+<style>
+:root{
+  --bg:#08060f; --bg2:#0e0a1c; --panel:#161028; --panel2:#1d1533;
+  --line:#2a1f47; --text:#e7e2f4; --muted:#9b92b8;
+  --accent:#c9a04a; --accent2:#7a5cc6; --danger:#c33a4e; --ok:#4bb87a;
+  --hp:#d04050; --sta:#4a90d0; --xp:#c9a04a;
+  --nav-h:64px; --head-h:52px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:15px;line-height:1.4;overscroll-behavior:none;user-select:none}
+body{min-height:100dvh;background:
+  radial-gradient(ellipse at top,#1a1030 0%,transparent 60%),
+  radial-gradient(ellipse at bottom,#0d0820 0%,transparent 70%),var(--bg)}
+#app{display:flex;flex-direction:column;min-height:100dvh;padding-bottom:env(safe-area-inset-bottom)}
+#header{display:flex;align-items:center;gap:8px;height:var(--head-h);
+  padding:0 10px;padding-top:env(safe-area-inset-top);
+  background:rgba(14,10,28,.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.h-title{flex:1;display:flex;flex-direction:column;align-items:center;line-height:1.1}
+#header-loc{font-size:13px;color:var(--accent);font-weight:600;letter-spacing:.5px}
+#header-night{font-size:10px;color:var(--muted);letter-spacing:1px}
+.icon-btn{background:transparent;border:1px solid var(--line);color:var(--text);
+  width:36px;height:36px;border-radius:10px;font-size:16px;cursor:pointer}
+.icon-btn:active{background:var(--panel2)}
+#screen{flex:1;padding:14px 14px calc(var(--nav-h) + 24px);overflow-y:auto;
+  -webkit-overflow-scrolling:touch}
+h1,h2,h3{margin:0 0 8px}
+h1{font-size:22px;color:var(--accent);letter-spacing:1px}
+h2{font-size:17px;color:var(--accent)}
+h3{font-size:15px;color:var(--text)}
+p{margin:6px 0;color:var(--text)}
+.muted{color:var(--muted);font-size:13px}
+.center{text-align:center}
+.panel{background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.panel.tight{padding:10px}
+.row{display:flex;align-items:center;gap:8px}
+.between{justify-content:space-between}
+.grow{flex:1}
+.gap{margin-top:8px}
+.btn{display:block;width:100%;padding:13px 14px;margin:6px 0;border-radius:12px;
+  background:linear-gradient(180deg,var(--panel2),#120b24);
+  border:1px solid var(--line);color:var(--text);font-size:15px;font-weight:500;
+  cursor:pointer;text-align:left;transition:.12s}
+.btn:active{transform:scale(.985);background:var(--panel)}
+.btn.primary{background:linear-gradient(180deg,#3a2a6a,#241a44);
+  border-color:var(--accent2);color:#fff}
+.btn.gold{border-color:var(--accent);color:var(--accent)}
+.btn.danger{border-color:var(--danger);color:var(--danger)}
+.btn.ok{border-color:var(--ok);color:var(--ok)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.small{padding:9px 12px;font-size:13px;width:auto;display:inline-block;margin:3px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn-row .btn{flex:1;min-width:0;text-align:center}
+.bar{height:10px;border-radius:6px;background:#0a0616;overflow:hidden;
+  border:1px solid var(--line);margin:3px 0}
+.bar > div{height:100%;transition:width .25s}
+.bar.hp > div{background:linear-gradient(90deg,#7c2534,#e05568)}
+.bar.sta > div{background:linear-gradient(90deg,#25416b,#5ba3e8)}
+.bar.xp > div{background:linear-gradient(90deg,#7c5c1e,#e0b658)}
+.bar.enemy > div{background:linear-gradient(90deg,#5c1e3d,#b0557c)}
+.stat-row{display:flex;gap:10px;font-size:12px;color:var(--muted);margin:3px 0}
+.stat-row b{color:var(--text);font-weight:600}
+.stat-chip{background:#0f0a20;border:1px solid var(--line);border-radius:8px;
+  padding:4px 8px;font-size:11px;color:var(--muted);display:inline-block;margin:2px}
+.stat-chip b{color:var(--accent)}
+#bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));
+  padding-bottom:env(safe-area-inset-bottom);
+  display:grid;grid-template-columns:repeat(5,1fr);
+  background:rgba(10,6,20,.96);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);z-index:30}
+#bottom-nav button{background:transparent;border:0;color:var(--muted);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;font-size:9px;letter-spacing:.5px;cursor:pointer;padding:4px}
+#bottom-nav button i{font-style:normal;font-size:18px;line-height:1}
+#bottom-nav button.active{color:var(--accent)}
+#modal-root{position:fixed;inset:0;z-index:50;display:none;
+  align-items:flex-end;justify-content:center}
+#modal-root.show{display:flex}
+.modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(3px)}
+.modal{position:relative;width:100%;max-width:520px;max-height:88dvh;
+  background:linear-gradient(180deg,var(--panel),#0d0820);
+  border:1px solid var(--line);border-radius:18px 18px 0 0;
+  padding:16px 16px calc(16px + env(safe-area-inset-bottom));
+  overflow-y:auto;animation:slideUp .22s ease-out}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-title{font-size:17px;color:var(--accent);margin-bottom:10px;font-weight:600}
+#toast-root{position:fixed;top:calc(var(--head-h) + 8px);left:0;right:0;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  pointer-events:none;z-index:60}
+.toast{background:#1d1533;border:1px solid var(--accent2);color:var(--text);
+  padding:9px 14px;border-radius:10px;font-size:13px;max-width:90%;
+  box-shadow:0 6px 24px rgba(0,0,0,.5);animation:fadeIn .18s}
+.toast.err{border-color:var(--danger)}
+.toast.ok{border-color:var(--ok)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.enemy-card{text-align:center;padding:14px;background:
+  radial-gradient(ellipse at center,#1e1440 0%,transparent 70%);
+  border:1px solid var(--line);border-radius:14px;margin-bottom:10px}
+.enemy-name{font-size:18px;color:var(--accent);font-weight:600}
+.enemy-tag{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.combat-log{background:#0a0616;border:1px solid var(--line);border-radius:10px;
+  padding:10px;height:120px;overflow-y:auto;font-size:12px;line-height:1.5;color:var(--muted)}
+.combat-log div{margin:2px 0}
+.combat-log .me{color:#8fc4f0}
+.combat-log .foe{color:#e08a9a}
+.combat-log .sp{color:#c9a04a}
+.combat-log .sys{color:#9b92b8;font-style:italic}
+.item-row{display:flex;align-items:center;gap:10px;padding:10px;
+  border:1px solid var(--line);border-radius:10px;margin-bottom:6px;
+  background:#120c22;cursor:pointer}
+.item-row:active{background:var(--panel2)}
+.item-ico{width:34px;height:34px;border-radius:8px;background:#0a0616;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  border:1px solid var(--line);flex-shrink:0}
+.item-body{flex:1;min-width:0}
+.item-name{font-size:14px;color:var(--text);font-weight:500;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item-sub{font-size:11px;color:var(--muted)}
+.rarity-common{color:#a0a0b0}
+.rarity-uncommon{color:#4bb87a}
+.rarity-rare{color:#4a90d0}
+.rarity-epic{color:#a06ce0}
+.rarity-legendary{color:#e0a84a}
+.rarity-mythic{color:#e055a0}
+.empty{text-align:center;color:var(--muted);padding:30px 10px;font-size:13px}
+input,textarea{width:100%;padding:12px;border-radius:10px;background:#0a0616;
+  color:var(--text);border:1px solid var(--line);font-size:15px;font-family:inherit}
+input:focus,textarea:focus{outline:none;border-color:var(--accent2)}
+label.muted{display:block;margin-top:10px;margin-bottom:4px}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="header">
+    <button class="icon-btn" id="btn-journal" title="Journal">📖</button>
+    <div class="h-title">
+      <span id="header-loc">BhuanaKamaya</span>
+      <span id="header-night">Malam 1</span>
+    </div>
+    <button class="icon-btn" id="btn-char" title="Karakter">👤</button>
+  </header>
+  <main id="screen"></main>
+  <nav id="bottom-nav">
+    <button data-tab="home" class="active"><i>⌂</i><span>HOME</span></button>
+    <button data-tab="explore"><i>🗺</i><span>JELAJAH</span></button>
+    <button data-tab="quest"><i>◈</i><span>QUEST</span></button>
+    <button data-tab="inventory"><i>🎒</i><span>ITEM</span></button>
+    <button data-tab="spirit"><i>✦</i><span>SPIRIT</span></button>
+  </nav>
+</div>
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+<script>
+/* ============================================================
+   BHUANAKAMAYA — single file build
+   ============================================================ */
+(function(){
+'use strict';
+
+/* ---------- UTILS ---------- */
+function rng(a,b){return Math.random()*(b-a)+a;}
+function rint(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function esc(s){
+  if(s==null)return '';
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function chance(p){return Math.random()<p;}
+
+/* ---------- DATA: CLASSES ---------- */
+const CLASSES = {
+  DUKUN:{id:'DUKUN',name:'Dukun',role:'BIND',
+    desc:'Pengikat spirit. Menguasai sigil, buku kuno, dan ritual sebagai mekanik.',
+    hpMult:0.85,atkMult:0.90,defMult:0.90,staMult:1.00,captureBonus:0.15,
+    startSkills:['aji_coroko','spirit_ward'],
+    skills:['aji_coroko','spirit_ward','sigil_mastery','binding_sense','ancient_lore','spirit_detection','spirit_resistance','ritual_knowledge','demonology_knowledge','artifact_binding'],
+    startItems:['buku_nusantara','keris_kecil'],
+    loreNote:'Mengetahui nama-nama yang tidak seharusnya disebut.'},
+  PENDEKAR:{id:'PENDEKAR',name:'Pendekar',role:'BREAK',
+    desc:'Petarung fisik. Stamina tinggi, defense kuat, crit tinggi.',
+    hpMult:1.20,atkMult:1.25,defMult:1.30,staMult:1.15,captureBonus:0,
+    startSkills:['tebasan','kuda_kuda'],
+    skills:['tebasan','kuda_kuda','balasan'],
+    startItems:['golok_tua','rompi_kulit'],
+    loreNote:'Jejak kakinya dikenali di setiap desa.'},
+  PARANORMAL:{id:'PARANORMAL',name:'Paranormal',role:'REVEAL',
+    desc:'Penyelidik. Mengungkap kelemahan musuh dan jejak tersembunyi.',
+    hpMult:0.95,atkMult:1.00,defMult:1.00,staMult:1.00,captureBonus:0.05,
+    startSkills:['analisa','spirit_sight'],
+    skills:['analisa','spirit_sight','jejak_gaib'],
+    startItems:['lensa_retak','buku_catatan'],
+    loreNote:'Mata yang melihat apa yang tak ingin dilihat.'},
+  AHLI_WARISAN:{id:'AHLI_WARISAN',name:'Ahli Warisan',role:'UNLOCK',
+    desc:'Penjaga pengetahuan kuno. Membuka gerbang, relik, dan misteri.',
+    hpMult:1.00,atkMult:1.05,defMult:1.10,staMult:1.00,captureBonus:0.05,
+    startSkills:['baca_relik','pengetahuan_kuno'],
+    skills:['baca_relik','pengetahuan_kuno','puzzle_sense'],
+    startItems:['relik_kecil','kunci_kuno'],
+    loreNote:'Darah para penjaga ambang.'}
+};
+
+/* ---------- DATA: SKILLS ---------- */
+const SKILLS = {
+  aji_coroko:{id:'aji_coroko',name:'Aji Coroko Sungsang',type:'attack',cost:12,power:1.4,element:'astral',desc:'Serangan astral. Mengabaikan 30% DEF musuh.'},
+  spirit_ward:{id:'spirit_ward',name:'Spirit Ward',type:'buff',cost:15,effect:{def:'+70%',turns:2},desc:'Kurangi damage masuk 70% selama 2 giliran.'},
+  sigil_mastery:{id:'sigil_mastery',name:'Sigil Mastery',type:'buff',cost:10,effect:{capture:'+20%',turns:2},desc:'+20% peluang Keep Spirit giliran ini.'},
+  binding_sense:{id:'binding_sense',name:'Binding Sense',type:'passive',cost:0,desc:'Menampilkan peluang Keep Spirit akurat.'},
+  spirit_detection:{id:'spirit_detection',name:'Spirit Detection',type:'passive',cost:0,desc:'Spirit muncul lebih sering.'},
+  spirit_resistance:{id:'spirit_resistance',name:'Spirit Resistance',type:'passive',cost:0,desc:'-20% damage dari Spirit.'},
+  ancient_lore:{id:'ancient_lore',name:'Ancient Lore',type:'passive',cost:0,desc:'+50% Lore dari buku.'},
+  ritual_knowledge:{id:'ritual_knowledge',name:'Ritual Knowledge',type:'passive',cost:0,desc:'Buka opsi ritual di altar tertentu.'},
+  demonology_knowledge:{id:'demonology_knowledge',name:'Demonology Knowledge',type:'passive',cost:0,desc:'+15% Keep terhadap Demon.'},
+  artifact_binding:{id:'artifact_binding',name:'Artifact Binding',type:'passive',cost:0,desc:'Artefak memberi bonus tambahan.'},
+  tebasan:{id:'tebasan',name:'Tebasan',type:'attack',cost:18,power:1.9,element:'physical',desc:'Serangan kuat. Peluang crit +20%.'},
+  kuda_kuda:{id:'kuda_kuda',name:'Kuda-Kuda',type:'buff',cost:8,effect:{def:'+100%',turns:2},desc:'+100% DEF selama 2 giliran.'},
+  balasan:{id:'balasan',name:'Balasan',type:'stance',cost:10,power:1.0,element:'physical',desc:'Balas 80% damage musuh.'},
+  analisa:{id:'analisa',name:'Analisa',type:'buff',cost:10,effect:{dmgDealt:'+25%',turns:3},desc:'+25% damage selama 3 giliran.'},
+  spirit_sight:{id:'spirit_sight',name:'Spirit Sight',type:'passive',cost:0,desc:'Melihat stat penuh musuh.'},
+  jejak_gaib:{id:'jejak_gaib',name:'Jejak Gaib',type:'passive',cost:0,desc:'+1 petunjuk per investigasi.'},
+  baca_relik:{id:'baca_relik',name:'Baca Relik',type:'buff',cost:15,effect:{atk:'+20%',turns:99},desc:'+20% ATK selama combat ini.'},
+  pengetahuan_kuno:{id:'pengetahuan_kuno',name:'Pengetahuan Kuno',type:'passive',cost:0,desc:'Buka gerbang kuno.'},
+  puzzle_sense:{id:'puzzle_sense',name:'Puzzle Sense',type:'passive',cost:0,desc:'Menampilkan petunjuk puzzle.'}
+};
+
+/* ---------- DATA: ITEMS ---------- */
+const ITEMS = {
+  keris_kecil:{id:'keris_kecil',name:'Keris Kecil',kind:'weapon',ico:'🗡',atk:4,desc:'Keris pusaka kecil. +4 ATK.'},
+  golok_tua:{id:'golok_tua',name:'Golok Tua',kind:'weapon',ico:'🗡',atk:7,desc:'Golok petani. +7 ATK.'},
+  tongkat_ritual:{id:'tongkat_ritual',name:'Tongkat Ritual',kind:'weapon',ico:'🪄',atk:3,spiritBonus:0.05,desc:'+3 ATK, +5% Keep.'},
+  rompi_kulit:{id:'rompi_kulit',name:'Rompi Kulit',kind:'armor',ico:'🛡',def:4,desc:'Rompi kulit. +4 DEF.'},
+  jubah_lusuh:{id:'jubah_lusuh',name:'Jubah Lusuh',kind:'armor',ico:'🛡',def:3,spiritResist:0.10,desc:'+3 DEF, -10% damage spirit.'},
+  lensa_retak:{id:'lensa_retak',name:'Lensa Retak',kind:'artifact',ico:'🔍',detection:0.20,desc:'+20% investigasi.'},
+  relik_kecil:{id:'relik_kecil',name:'Relik Kecil',kind:'artifact',ico:'🔮',loreBonus:0.15,desc:'+15% Lore dari buku.'},
+  kunci_kuno:{id:'kunci_kuno',name:'Kunci Kuno',kind:'artifact',ico:'🗝',unlock:true,desc:'Membuka gerbang tertentu.'},
+  batu_astral:{id:'batu_astral',name:'Batu Astral',kind:'artifact',ico:'💠',atk:2,spiritBonus:0.10,desc:'+2 ATK, +10% Keep.'},
+  buku_nusantara:{id:'buku_nusantara',name:'Kitab Nusantara',kind:'book',ico:'📕',lore:5,desc:'+5 Lore Knowledge.'},
+  buku_catatan:{id:'buku_catatan',name:'Buku Catatan',kind:'book',ico:'📓',lore:3,desc:'+3 Lore Knowledge.'},
+  lesser_key:{id:'lesser_key',name:'The Lesser Key of Solomon',kind:'book',ico:'📖',lore:15,desc:'Grimoire fiksi. +15 Lore.'},
+  key_solomon:{id:'key_solomon',name:'Key of Solomon',kind:'book',ico:'📖',lore:20,desc:'Grimoire fiksi. +20 Lore.'},
+  ars_notoria:{id:'ars_notoria',name:'Ars Notoria',kind:'book',ico:'📖',lore:18,desc:'Grimoire fiksi. +18 Lore.'},
+  grimoire_verum:{id:'grimoire_verum',name:'Grimorium Verum',kind:'book',ico:'📖',lore:22,desc:'Grimoire fiksi. +22 Lore.'},
+  ramuan_pemulih:{id:'ramuan_pemulih',name:'Ramuan Pemulih',kind:'item',ico:'🧪',use:{hp:30},desc:'+30 HP.'},
+  ramuan_stamina:{id:'ramuan_stamina',name:'Ramuan Stamina',kind:'item',ico:'⚗',use:{sta:30},desc:'+30 Stamina.'},
+  dupa:{id:'dupa',name:'Dupa',kind:'item',ico:'🕯',use:{captureBuff:0.15},desc:'+15% Keep pada encounter ini.'},
+  petunjuk_lilin:{id:'petunjuk_lilin',name:'Sisa Lilin',kind:'quest',ico:'🕯',desc:'Lilin yang baru padam.'},
+  petunjuk_ukiran:{id:'petunjuk_ukiran',name:'Ukiran Aneh',kind:'quest',ico:'📜',desc:'Ukiran simbol di dinding.'},
+  petunjuk_pintu:{id:'petunjuk_pintu',name:'Pintu Tersembunyi',kind:'quest',ico:'🚪',desc:'Pintu kecil di balik lemari.'},
+  amulet_desa:{id:'amulet_desa',name:'Amulet Desa',kind:'quest',ico:'🧿',desc:'Amulet dari Sesepuh.'}
+};
+
+/* ---------- DATA: ENEMIES ---------- */
+const ENEMIES = {
+  bayangan_kecil:{id:'bayangan_kecil',name:'Bayangan Kecil',type:'Spirit',level:1,hp:30,atk:6,def:2,xp:15,keping:5,pattern:['atk','atk','guard'],desc:'Sosok gelap seukuran anak.'},
+  arwah_penunggu:{id:'arwah_penunggu',name:'Arwah Penunggu Altar',type:'Spirit',level:2,hp:60,atk:9,def:3,xp:40,keping:20,pattern:['atk','heavy','atk','guard'],desc:'Arwah penjaga altar.'},
+  hantu_hutan:{id:'hantu_hutan',name:'Hantu Hutan',type:'Spirit',level:3,hp:50,atk:10,def:4,xp:30,keping:12,pattern:['atk','atk','heavy'],desc:'Berasal dari pohon tua.'},
+  penunggu_makam:{id:'penunggu_makam',name:'Penunggu Makam',type:'Spirit',level:4,hp:70,atk:12,def:6,xp:55,keping:25,pattern:['guard','atk','heavy','atk'],desc:'Penjaga makam.'},
+  iblis_kecil:{id:'iblis_kecil',name:'Iblis Kecil',type:'Demon',level:5,hp:80,atk:15,def:5,xp:80,keping:40,pattern:['atk','heavy','heavy'],desc:'Entitas ambang.'}
+};
+
+/* ---------- DATA: SPIRITS ---------- */
+const RARITY_PENALTY = {Common:0,Uncommon:0.05,Rare:0.10,Epic:0.15,Legendary:0.20,Mythic:0.25};
+const SPIRITS = {
+  arwah_penunggu:{id:'arwah_penunggu',name:'Arwah Penunggu',type:'Spirit',rarity:'Uncommon',baseHp:60,baseAtk:9,baseDef:3,lore:'Arwah yang terikat pada tempat suci.'},
+  kunti_kecil:{id:'kunti_kecil',name:'Kunti Kecil',type:'Spirit',rarity:'Rare',baseHp:55,baseAtk:12,baseDef:4,lore:'Arwah perempuan dari cerita rakyat.'},
+  genderuwo_muda:{id:'genderuwo_muda',name:'Genderuwo Muda',type:'Spirit',rarity:'Rare',baseHp:80,baseAtk:11,baseDef:7,lore:'Raksasa halus penunggu hutan.'},
+  pocong_kecil:{id:'pocong_kecil',name:'Pocong Kecil',type:'Spirit',rarity:'Common',baseHp:40,baseAtk:7,baseDef:2,lore:'Arwah yang belum ikhlas.'},
+  iblis_kecil:{id:'iblis_kecil',name:'Iblis Kecil',type:'Demon',rarity:'Epic',baseHp:90,baseAtk:16,baseDef:6,lore:'Entitas dari ambang.'}
+};
+
+/* ---------- DATA: LOCATIONS ---------- */
+const LOCATIONS = {
+  desa:{id:'desa',name:'Desa Watu Kembar',safe:true,
+    desc:'Desa kecil di kaki bukit. Api unggun dijaga bergilir.',
+    actions:['istirahat','bicara_sesepuh'],
+    exits:[
+      {to:'rumah_kosong',label:'Rumah Kosong',gate:{flag:'quest_diterima'}},
+      {to:'hutan',label:'Hutan Tepi Desa',gate:{level:2}},
+      {to:'makam_tua',label:'Makam Tua',gate:{reputation:10}},
+      {to:'gua',label:'Gua Bukit',gate:{level:5}}
+    ]},
+  rumah_kosong:{id:'rumah_kosong',name:'Rumah Kosong',
+    desc:'Rumah terbengkalai. Bau kayu lapuk dan lilin yang baru padam.',
+    actions:[],exits:[{to:'desa',label:'Kembali ke Desa'}],
+    points:[
+      {id:'p_lilin',label:'Periksa Meja',gives:'petunjuk_lilin',flag:'petunjuk_1',text:'Di atas meja, lilin baru saja padam.'},
+      {id:'p_ukiran',label:'Periksa Dinding',gives:'petunjuk_ukiran',flag:'petunjuk_2',text:'Ukiran simbol di dinding. Bukan huruf biasa.'},
+      {id:'p_lemari',label:'Geser Lemari',gives:'petunjuk_pintu',flag:'petunjuk_3',text:'Di balik lemari, pintu kecil menuju ke bawah.'}
+    ]},
+  ruang_bawah_tanah:{id:'ruang_bawah_tanah',name:'Ruang Bawah Tanah',
+    desc:'Lorong sempit, batu berlumut. Udara dingin.',
+    actions:[],exits:[
+      {to:'rumah_kosong',label:'Naik ke Rumah'},
+      {to:'altar',label:'Ikuti Lorong Lebih Dalam',gate:{flag:'bawah_tanah'}}
+    ]},
+  altar:{id:'altar',name:'Ruang Altar',
+    desc:'Ruang bulat dengan altar batu di tengah. Simbol menyala samar.',
+    actions:['hadapi_spirit'],exits:[{to:'ruang_bawah_tanah',label:'Kembali'}]},
+  hutan:{id:'hutan',name:'Hutan Tepi Desa',
+    desc:'Pepohonan tinggi. Suara burung malam sesekali.',
+    actions:['cari_spirit'],exits:[{to:'desa',label:'Kembali ke Desa'}]},
+  makam_tua:{id:'makam_tua',name:'Makam Tua',
+    desc:'Barisan nisan berumur ratusan tahun.',
+    actions:['cari_spirit'],exits:[{to:'desa',label:'Kembali ke Desa'}]},
+  gua:{id:'gua',name:'Gua Bukit',
+    desc:'Mulut gua gelap. Angin membawa bisikan.',
+    actions:['cari_spirit'],exits:[{to:'desa',label:'Kembali ke Desa'}]}
+};
+
+/* ---------- DATA: QUESTS ---------- */
+const QUESTS = {
+  malam_pertama:{
+    id:'malam_pertama',title:'Malam Pertama',
+    desc:'Desa Watu Kembar memintamu menyelidiki rumah kosong di tepi desa.',
+    steps:[
+      {id:1,text:'Tiba di Desa Watu Kembar.',flag:'desa_masuk',auto:true},
+      {id:2,text:'Bicara dengan Sesepuh Desa.',flag:'quest_diterima',trigger:'bicara_sesepuh'},
+      {id:3,text:'Masuk ke Rumah Kosong.',flag:'masuk_rumah',trigger:'enter:rumah_kosong'},
+      {id:4,text:'Investigasi 3 titik petunjuk.',flag:'petunjuk_lengkap',requires:['petunjuk_1','petunjuk_2','petunjuk_3']},
+      {id:5,text:'Turun ke ruang bawah tanah.',flag:'bawah_tanah',trigger:'enter:ruang_bawah_tanah',onEnterReward:{keping:10,xp:20}},
+      {id:6,text:'Temukan ruang altar.',flag:'altar_ditemukan',trigger:'enter:altar',onEnterReward:{xp:30}},
+      {id:7,text:'Hadapi Arwah Penunggu Altar.',flag:'arwah_dihadapi',trigger:'combat_win:arwah_penunggu'},
+      {id:8,text:'Ikhtiar Keep Spirit.',flag:'spirit_pertama',trigger:'spirit_caught:arwah_penunggu',onEnterReward:{keping:50,xp:60}},
+      {id:9,text:'Lapor ke Sesepuh.',flag:'lapor_sesepuh',trigger:'lapor_sesepuh',onEnterReward:{keping:80,xp:100,item:'amulet_desa',reputation:15}},
+      {id:10,text:'Malam Pertama selesai.',flag:'q1_done',auto:true,onEnterReward:{xp:50}}
+    ]
+  }
+};
+
+/* ---------- TELEGRAM ---------- */
+const TG = (function(){
+  let tg=null, ready=false;
+  function init(){
+    try{
+      if(window.Telegram && window.Telegram.WebApp){
+        tg=window.Telegram.WebApp;
+        if(tg.ready) tg.ready();
+        if(tg.expand) tg.expand();
+        if(tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+        ready=true;
+        try{tg.setHeaderColor&&tg.setHeaderColor('#0e0a1c');}catch(e){}
+        try{tg.setBackgroundColor&&tg.setBackgroundColor('#08060f');}catch(e){}
+      }
+    }catch(e){tg=null;ready=false;}
+  }
+  function isReady(){return ready;}
+  function user(){
+    if(!ready||!tg.initDataUnsafe||!tg.initDataUnsafe.user)return null;
+    const u=tg.initDataUnsafe.user;
+    return {id:u.id,firstName:u.first_name||'Pemain',username:u.username||null};
+  }
+  function haptic(type){
+    if(!ready)return;
+    try{
+      if(type==='err'&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('error');
+      else if(type==='ok'&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
+      else if(type==='light'&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('light');
+    }catch(e){}
+  }
+  function backButton(show,cb){
+    if(!ready||!tg.BackButton)return;
+    try{
+      if(show){tg.BackButton.show();tg.BackButton.onClick(cb);}
+      else{tg.BackButton.hide();tg.BackButton.offClick(cb);}
+    }catch(e){}
+  }
+  return {init,isReady,user,haptic,backButton};
+})();
+
+/* ---------- STATE ---------- */
+const SAVE_VERSION=1;
+function createNewState(className,playerName){
+  return {
+    version:SAVE_VERSION,
+    player:{name:playerName||'Tanpa Nama',class:className,level:1,xp:0,
+      hp:100,maxHp:100,stamina:50,maxStamina:50,atk:10,def:5,
+      loreKnowledge:0,reputation:0,skillPoints:0,skills:[]},
+    inventory:{keping:0,items:[],equip:{weapon:null,armor:null,artifact1:null,artifact2:null}},
+    spirits:[],activeSpiritId:null,
+    quests:{activeId:'malam_pertama',stepIndex:0,flags:{}},
+    journal:{clues:[],booksRead:[],locationsFound:[],spiritsSeen:[],spiritsCaught:[]},
+    world:{currentLocation:'desa',visited:['desa'],nightCount:1},
+    meta:{createdAt:Date.now(),lastSave:0}
+  };
+}
+function validateState(s){
+  if(!s||typeof s!=='object')return false;
+  if(!s.player||!s.inventory||!s.quests||!s.world)return false;
+  if(s.activeSpiritId&&!s.spirits.find(x=>x.uid===s.activeSpiritId))s.activeSpiritId=null;
+  for(const k of Object.keys(s.inventory.equip)){
+    const v=s.inventory.equip[k];
+    if(v&&!s.inventory.items.find(it=>it.uid===v))s.inventory.equip[k]=null;
+  }
+  s.player.hp=clamp(s.player.hp,0,s.player.maxHp);
+  s.player.stamina=clamp(s.player.stamina,0,s.player.maxStamina);
+  return true;
+}
+function migrate(s){if(!s.version)s.version=1;return s;}
+
+/* ---------- SAVE ---------- */
+const SAVE_KEY='bhuankamaya_save_v1';
+function saveGame(state){
+  try{state.meta.lastSave=Date.now();state.version=SAVE_VERSION;
+    localStorage.setItem(SAVE_KEY,JSON.stringify(state));return true;}catch(e){return false;}
+}
+function loadGame(){
+  try{
+    const raw=localStorage.getItem(SAVE_KEY);
+    if(!raw)return null;
+    let s=JSON.parse(raw);s=migrate(s);
+    if(!validateState(s))return null;return s;
+  }catch(e){return null;}
+}
+function resetSave(){try{localStorage.removeItem(SAVE_KEY);}catch(e){}}
+function exportSave(s){return JSON.stringify(s,null,2);}
+function importSave(str){
+  try{let s=JSON.parse(str);s=migrate(s);
+    if(!validateState(s))return null;return s;}catch(e){return null;}
+}
+
+/* ---------- PLAYER ---------- */
+function xpNeeded(L){return 100+75*(L-1)+25*(L-1)*(L-1);}
+const MAX_LEVEL=20;
+function recalcStats(state){
+  const c=CLASSES[state.player.class];const L=state.player.level;
+  const baseHp=100+20*(L-1),baseSta=50+5*(L-1),baseAtk=10+3*(L-1),baseDef=5+2*(L-1);
+  let eqAtk=0,eqDef=0;
+  const eq=state.inventory.equip;
+  for(const k of ['weapon','armor','artifact1','artifact2']){
+    const u=eq[k];if(!u)continue;
+    const inst=state.inventory.items.find(x=>x.uid===u);if(!inst)continue;
+    const item=ITEMS[inst.id];if(!item)continue;
+    eqAtk+=item.atk||0;eqDef+=item.def||0;
+  }
+  const newMaxHp=Math.round(baseHp*c.hpMult)+eqDef*2;
+  const newMaxSta=Math.round(baseSta*c.staMult);
+  const newAtk=Math.round(baseAtk*c.atkMult)+eqAtk;
+  const newDef=Math.round(baseDef*c.defMult)+eqDef;
+  const hpRatio=state.player.maxHp>0?state.player.hp/state.player.maxHp:1;
+  state.player.maxHp=newMaxHp;
+  state.player.hp=Math.min(newMaxHp,Math.round(newMaxHp*hpRatio));
+  state.player.maxStamina=newMaxSta;
+  state.player.stamina=Math.min(state.player.stamina,newMaxSta);
+  state.player.atk=newAtk;state.player.def=newDef;
+}
+function addXp(state,amount){
+  state.player.xp+=amount;const events=[];
+  while(state.player.level<MAX_LEVEL&&state.player.xp>=xpNeeded(state.player.level)){
+    state.player.xp-=xpNeeded(state.player.level);
+    state.player.level++;state.player.skillPoints++;
+    recalcStats(state);events.push(state.player.level);
+  }
+  return events;
+}
+
+/* ---------- INVENTORY ---------- */
+function addItem(state,itemId,qty){
+  qty=qty||1;const def=ITEMS[itemId];if(!def)return false;
+  if(def.kind==='item'||def.kind==='book'){
+    const ex=state.inventory.items.find(x=>x.id===itemId);
+    if(ex)ex.qty+=qty;else state.inventory.items.push({uid:uid(),id:itemId,qty:qty});
+  }else{
+    for(let i=0;i<qty;i++)state.inventory.items.push({uid:uid(),id:itemId,qty:1});
+  }
+  return true;
+}
+function removeItem(state,uidOrId,qty){
+  qty=qty||1;
+  const idx=state.inventory.items.findIndex(x=>x.uid===uidOrId||x.id===uidOrId);
+  if(idx<0)return false;
+  const inst=state.inventory.items[idx];inst.qty-=qty;
+  if(inst.qty<=0){
+    for(const k of Object.keys(state.inventory.equip)){
+      if(state.inventory.equip[k]===inst.uid)state.inventory.equip[k]=null;
+    }
+    state.inventory.items.splice(idx,1);recalcStats(state);
+  }
+  return true;
+}
+function equipItem(state,u){
+  const inst=state.inventory.items.find(x=>x.uid===u);if(!inst)return false;
+  const def=ITEMS[inst.id];if(!def)return false;
+  const slot=def.kind;
+  if(slot==='weapon')state.inventory.equip.weapon=u;
+  else if(slot==='armor')state.inventory.equip.armor=u;
+  else if(slot==='artifact'){
+    if(!state.inventory.equip.artifact1)state.inventory.equip.artifact1=u;
+    else if(!state.inventory.equip.artifact2)state.inventory.equip.artifact2=u;
+    else state.inventory.equip.artifact1=u;
+  }else return false;
+  recalcStats(state);return true;
+}
+function unequipSlot(state,slot){
+  if(!(slot in state.inventory.equip))return false;
+  state.inventory.equip[slot]=null;recalcStats(state);return true;
+}
+function useConsumable(state,u){
+  const inst=state.inventory.items.find(x=>x.uid===u);if(!inst)return {ok:false,msg:'Item tidak ditemukan.'};
+  const def=ITEMS[inst.id];if(!def||def.kind!=='item')return {ok:false,msg:'Bukan item pakai.'};
+  const out={ok:true,msg:''};
+  if(def.use.hp){const b=state.player.hp;state.player.hp=Math.min(state.player.maxHp,state.player.hp+def.use.hp);out.msg+='+'+(state.player.hp-b)+' HP. ';}
+  if(def.use.sta){const b=state.player.stamina;state.player.stamina=Math.min(state.player.maxStamina,state.player.stamina+def.use.sta);out.msg+='+'+(state.player.stamina-b)+' Stamina.';}
+  if(def.use.captureBuff){out.msg+='+'+Math.round(def.use.captureBuff*100)+'% Keep (encounter ini).';}
+  removeItem(state,inst.uid,1);return out;
+}
+function readBook(state,u){
+  const inst=state.inventory.items.find(x=>x.uid===u);if(!inst)return {ok:false,msg:'Buku tidak ditemukan.'};
+  const def=ITEMS[inst.id];if(!def||def.kind!=='book')return {ok:false,msg:'Bukan buku.'};
+  if(state.journal.booksRead.indexOf(def.id)>=0)return {ok:false,msg:'Sudah pernah dibaca.'};
+  let bonus=def.lore||0;
+  if(state.player.class==='AHLI_WARISAN')bonus=Math.round(bonus*1.5);
+  else if(state.player.skills.indexOf('ancient_lore')>=0)bonus=Math.round(bonus*1.5);
+  state.player.loreKnowledge+=bonus;
+  state.journal.booksRead.push(def.id);
+  return {ok:true,msg:'+'+bonus+' Lore Knowledge.'};
+}
+
+/* ---------- SPIRIT ---------- */
+function spiritBaseStats(speciesId,level){
+  const sp=SPIRITS[speciesId];if(!sp)return null;
+  const L=level||1;
+  return {maxHp:sp.baseHp+8*(L-1),atk:sp.baseAtk+2*(L-1),def:sp.baseDef+1*(L-1)};
+}
+function captureChance(state,hp,maxHp,rarity,lvl,type,extra){
+  const hpFrac=1-(hp/maxHp);
+  let c=0.10+0.60*hpFrac;
+  c-=(RARITY_PENALTY[rarity]||0);
+  c-=0.03*Math.max(0,lvl-state.player.level);c=Math.max(0,c);
+  c+=state.player.class==='DUKUN'?0.15:0.05;
+  if(type==='Demon'&&state.player.skills.indexOf('demonology_knowledge')>=0)c+=0.15;
+  if(extra)c+=extra;
+  for(const k of ['weapon','armor','artifact1','artifact2']){
+    const u=state.inventory.equip[k];if(!u)continue;
+    const inst=state.inventory.items.find(x=>x.uid===u);if(!inst)continue;
+    const def=ITEMS[inst.id];if(def&&def.spiritBonus)c+=def.spiritBonus;
+  }
+  return clamp(c,0.05,0.95);
+}
+function addSpirit(state,speciesId,level){
+  const sp=SPIRITS[speciesId];if(!sp)return null;
+  const stats=spiritBaseStats(speciesId,level||1);
+  const inst={uid:uid(),speciesId:speciesId,nickname:sp.name,level:level||1,xp:0,
+    hp:stats.maxHp,maxHp:stats.maxHp,atk:stats.atk,def:stats.def};
+  state.spirits.push(inst);
+  if(state.journal.spiritsCaught.indexOf(speciesId)<0)state.journal.spiritsCaught.push(speciesId);
+  return inst;
+}
+function setActiveSpirit(state,u){
+  if(u&&!state.spirits.find(x=>x.uid===u))return false;
+  state.activeSpiritId=u||null;return true;
+}
+function getActive(state){
+  if(!state.activeSpiritId)return null;
+  return state.spirits.find(x=>x.uid===state.activeSpiritId)||null;
+}
+function renameSpirit(state,u,name){
+  const s=state.spirits.find(x=>x.uid===u);if(!s)return false;
+  const clean=String(name).slice(0,20).trim();if(!clean)return false;
+  s.nickname=clean;return true;
+}
+function addSpiritXp(state,amount){
+  const s=getActive(state);if(!s)return;
+  s.xp+=amount;
+  while(s.level<20&&s.xp>=xpNeeded(s.level)){
+    s.xp-=xpNeeded(s.level);s.level++;
+    const st=spiritBaseStats(s.speciesId,s.level);
+    const hpRatio=s.hp/s.maxHp;
+    s.maxHp=st.maxHp;s.hp=Math.round(st.maxHp*hpRatio);
+    s.atk=st.atk;s.def=st.def;
+  }
+}
+function restAllSpirits(state){for(const s of state.spirits)s.hp=s.maxHp;}
+function upgradeCost(s){return 30+s.level*20;}
+function upgradeSpirit(state,u){
+  const s=state.spirits.find(x=>x.uid===u);if(!s)return {ok:false,msg:'Spirit tidak ditemukan.'};
+  const cost=upgradeCost(s);
+  if(state.inventory.keping<cost)return {ok:false,msg:'Butuh '+cost+' Keping.'};
+  if(s.level>=20)return {ok:false,msg:'Level maksimum.'};
+  state.inventory.keping-=cost;s.level++;
+  const st=spiritBaseStats(s.speciesId,s.level);
+  s.maxHp=st.maxHp;s.hp=st.maxHp;s.atk=st.atk;s.def=st.def;
+  return {ok:true,msg:s.nickname+' naik ke level '+s.level+'!'};
+}
+
+/* ---------- QUEST ---------- */
+function currentQuest(state){return state.quests.activeId?QUESTS[state.quests.activeId]:null;}
+function setFlag(state,flag){
+  if(!flag)return false;
+  if(state.quests.flags[flag])return false;
+  state.quests.flags[flag]=true;return true;
+}
+function hasFlag(state,flag){return !!state.quests.flags[flag];}
+function applyRewards(state,rw,notify){
+  if(!rw)return;const parts=[];
+  if(rw.xp){addXp(state,rw.xp);parts.push('+'+rw.xp+' XP');}
+  if(rw.keping){state.inventory.keping+=rw.keping;parts.push('+'+rw.keping+' Keping');}
+  if(rw.item){addItem(state,rw.item,1);parts.push('+'+rw.item);}
+  if(rw.reputation){state.player.reputation+=rw.reputation;parts.push('+'+rw.reputation+' Reputasi');}
+  if(notify&&parts.length)notify(parts.join(', '));
+}
+function tryAdvance(state,eventKey,notify){
+  const q=currentQuest(state);if(!q)return false;
+  const step=q.steps[state.quests.stepIndex];if(!step)return false;
+  let advanced=false;
+  if(step.auto&&step.flag&&!state.quests.flags[step.flag]){
+    setFlag(state,step.flag);applyRewards(state,step.onEnterReward,notify);advanced=true;
+  }
+  if(!advanced&&step.requires&&step.requires.every(f=>state.quests.flags[f])&&step.flag&&!state.quests.flags[step.flag]){
+    setFlag(state,step.flag);applyRewards(state,step.onEnterReward,notify);advanced=true;
+  }
+  if(!advanced&&step.trigger&&eventKey===step.trigger){
+    setFlag(state,step.flag);applyRewards(state,step.onEnterReward,notify);advanced=true;
+  }
+  if(advanced){
+    state.quests.stepIndex=Math.min(state.quests.stepIndex+1,q.steps.length);
+    if(state.quests.stepIndex<q.steps.length)tryAdvance(state,null,notify);
+    return true;
+  }
+  return false;
+}
+function questProgress(state){
+  const q=currentQuest(state);
+  if(!q)return {title:'Tidak ada quest aktif',total:0,cur:0,steps:[]};
+  return {title:q.title,total:q.steps.length,cur:state.quests.stepIndex,
+    steps:q.steps.map((s,i)=>({id:s.id,text:s.text,done:i<state.quests.stepIndex,current:i===state.quests.stepIndex}))};
+}
+
+/* ---------- EXPLORE ---------- */
+function getLocation(state){return LOCATIONS[state.world.currentLocation];}
+function canEnter(state,locId){
+  const loc=LOCATIONS[locId];if(!loc)return {ok:false,reason:'Lokasi tidak dikenal.'};
+  const cur=getLocation(state);if(!cur)return {ok:false,reason:'Lokasi sekarang rusak.'};
+  const exit=(cur.exits||[]).find(e=>e.to===locId);
+  if(!exit)return {ok:false,reason:'Tidak ada jalan ke sana.'};
+  const g=exit.gate||{};
+  if(g.flag&&!hasFlag(state,g.flag))return {ok:false,reason:'Jalan ini belum terbuka.'};
+  if(g.level&&state.player.level<g.level)return {ok:false,reason:'Butuh Level '+g.level+'.'};
+  if(g.reputation&&state.player.reputation<g.reputation)return {ok:false,reason:'Butuh Reputasi '+g.reputation+'.'};
+  if(g.item){
+    const has=state.inventory.items.find(x=>x.id===g.item);
+    if(!has)return {ok:false,reason:'Butuh item: '+(ITEMS[g.item]?ITEMS[g.item].name:g.item)+'.'};
+  }
+  return {ok:true};
+}
+function enterLocation(state,locId,notify){
+  const chk=canEnter(state,locId);if(!chk.ok)return {ok:false,msg:chk.reason};
+  state.world.currentLocation=locId;
+  if(state.world.visited.indexOf(locId)<0){
+    state.world.visited.push(locId);
+    if(state.journal.locationsFound.indexOf(locId)<0)state.journal.locationsFound.push(locId);
+  }
+  tryAdvance(state,'enter:'+locId,notify);
+  if(locId==='rumah_kosong')setFlag(state,'masuk_rumah');
+  if(locId==='ruang_bawah_tanah')setFlag(state,'bawah_tanah');
+  if(locId==='altar')setFlag(state,'altar_ditemukan');
+  return {ok:true};
+}
+function investigate(state,pointId,notify){
+  const loc=getLocation(state);
+  if(!loc||!loc.points)return {ok:false,msg:'Tidak ada yang bisa diperiksa.'};
+  const p=loc.points.find(x=>x.id===pointId);
+  if(!p)return {ok:false,msg:'Titik tidak ditemukan.'};
+  if(hasFlag(state,p.flag))return {ok:false,msg:'Sudah diperiksa.'};
+  setFlag(state,p.flag);
+  if(p.gives)addItem(state,p.gives,1);
+  if(state.journal.clues.indexOf(p.id)<0)state.journal.clues.push(p.id);
+  tryAdvance(state,null,notify);
+  return {ok:true,text:p.text,gives:p.gives};
+}
+function searchSpirit(state){
+  const loc=getLocation(state);
+  if(!loc||loc.actions.indexOf('cari_spirit')<0)return {ok:false,msg:'Tidak bisa mencari spirit di sini.'};
+  const p=0.6+(state.player.skills.indexOf('spirit_detection')>=0?0.2:0);
+  if(!chance(p))return {ok:true,found:false,msg:'Tidak ada spirit kali ini.'};
+  const table={hutan:['pocong_kecil','kunti_kecil','genderuwo_muda'],
+    makam_tua:['pocong_kecil','arwah_penunggu','kunti_kecil'],
+    gua:['iblis_kecil','genderuwo_muda']};
+  const ids=table[loc.id]||['pocong_kecil'];
+  const sid=pick(ids);
+  if(state.journal.spiritsSeen.indexOf(sid)<0)state.journal.spiritsSeen.push(sid);
+  return {ok:true,found:true,speciesId:sid};
+}
+function restAtVillage(state){
+  state.player.hp=state.player.maxHp;state.player.stamina=state.player.maxStamina;
+  state.world.nightCount+=1;return {ok:true};
+}
+
+/* ---------- COMBAT ---------- */
+function startCombat(state,enemyId,opts){
+  opts=opts||{};
+  const base=ENEMIES[enemyId];if(!base)return null;
+  const enemy={id:base.id,name:base.name,type:base.type,level:base.level,
+    hp:base.hp,maxHp:base.hp,atk:base.atk,def:base.def,
+    pattern:base.pattern.slice(),patternIdx:0,xp:base.xp,keping:base.keping};
+  return {enemy:enemy,isSpirit:!!opts.isSpirit,speciesId:opts.speciesId||null,
+    rarity:opts.rarity||null,nonLethal:!!opts.isSpirit,
+    log:[{t:'sys',m:'Kamu menghadapi '+enemy.name+' (Lv '+enemy.level+').'}],
+    turn:'player',defending:false,dodgeNext:false,counterNext:false,
+    buffs:{def:0,defTurns:0,dmgDealt:0,dmgTurns:0,atkTurns:0},
+    captureBuff:0,over:false,result:null,
+    reward:{xp:0,keping:0,items:[]}};
+}
+function startSpiritCombat(state,speciesId,isProlog){
+  const spDef=SPIRITS[speciesId];if(!spDef)return null;
+  let enemyId='bayangan_kecil';
+  if(speciesId==='arwah_penunggu')enemyId='arwah_penunggu';
+  else if(speciesId==='kunti_kecil')enemyId='hantu_hutan';
+  else if(speciesId==='genderuwo_muda')enemyId='hantu_hutan';
+  else if(speciesId==='iblis_kecil')enemyId='iblis_kecil';
+  else if(speciesId==='pocong_kecil')enemyId='bayangan_kecil';
+  const enemyBase=ENEMIES[enemyId];
+  const enemy={id:speciesId,name:spDef.name,type:spDef.type,level:1,
+    hp:spDef.baseHp,maxHp:spDef.baseHp,atk:spDef.baseAtk,def:spDef.baseDef,
+    pattern:enemyBase.pattern.slice(),patternIdx:0,xp:enemyBase.xp,keping:enemyBase.keping};
+  const c={enemy:enemy,isSpirit:true,speciesId:speciesId,rarity:spDef.rarity,
+    nonLethal:true,
+    log:[{t:'sys',m:'Kau berhadapan dengan '+spDef.name+' ('+spDef.rarity+').'},
+         {t:'sys',m:'Non-lethal aktif. Gunakan Keep Spirit saat HP ≤ 50%.'}],
+    turn:'player',defending:false,dodgeNext:false,counterNext:false,
+    buffs:{def:0,defTurns:0,dmgDealt:0,dmgTurns:0,atkTurns:0},
+    captureBuff:0,over:false,result:null,
+    reward:{xp:enemyBase.xp,keping:enemyBase.keping,items:[]}};
+  if(state.journal.spiritsSeen.indexOf(speciesId)<0)state.journal.spiritsSeen.push(speciesId);
+  if(isProlog)setFlag(state,'arwah_dihadapi');
+  return c;
+}
+function cLog(c,t,m){c.log.push({t:t,m:m});if(c.log.length>60)c.log.shift();}
+function dmgCalc(atk,def,power,variance){
+  const base=atk*(power||1);
+  const reduction=100/(100+def);
+  const v=variance?rng(0.9,1.1):1;
+  return Math.max(1,Math.round(base*reduction*v));
+}
+function applyDamageToEnemy(c,dmg){
+  if(c.guarding){ dmg = Math.round(dmg * 0.5); c.guarding = false; }
+  if(c.nonLethal&&c.enemy.hp-dmg<1){
+    dmg=Math.max(0,c.enemy.hp-1);
+    cLog(c,'sys','Kamu menahan serangan agar tidak menghancurkan spirit.');
+  }
+  c.enemy.hp=Math.max(0,c.enemy.hp-dmg);
+}
+function canCapture(c){return c.isSpirit&&!c.over&&c.enemy.hp<=c.enemy.maxHp*0.5;}
+function playerAttack(state,c){
+  if(c.over)return;
+  let dmg=dmgCalc(state.player.atk,c.enemy.def,1.0,true);
+  if(c.buffs.dmgDealt)dmg=Math.round(dmg*(1+c.buffs.dmgDealt));
+  const critChance=0.05+(state.player.class==='PENDEKAR'?0.08:0);
+  if(chance(critChance)){dmg=Math.round(dmg*1.5);cLog(c,'me','Serangan kritis! '+dmg+' damage.');}
+  else cLog(c,'me','Kamu menyerang. '+dmg+' damage.');
+  applyDamageToEnemy(c,dmg);
+  afterPlayerAction(state,c);
+}
+function playerSkill(state,c,skillId){
+  if(c.over)return {ok:false,msg:'Combat sudah selesai.'};
+  const sk=SKILLS[skillId];if(!sk)return {ok:false,msg:'Skill tidak dikenal.'};
+  if(state.player.skills.indexOf(skillId)<0)return {ok:false,msg:'Skill belum dipelajari.'};
+  if(sk.type==='passive')return {ok:false,msg:'Skill pasif.'};
+  if(sk.type==='buff'||sk.type==='stance'){
+    if(state.player.stamina<sk.cost)return {ok:false,msg:'Stamina kurang.'};
+    state.player.stamina-=sk.cost;
+    if(sk.type==='buff'){
+      const e=sk.effect||{};
+      if(e.def){c.buffs.def=parseFloat(e.def)/100;c.buffs.defTurns=e.turns;}
+      if(e.dmgDealt){c.buffs.dmgDealt=parseFloat(e.dmgDealt)/100;c.buffs.dmgTurns=e.turns;}
+      if(e.capture){c.captureBuff=(c.captureBuff||0)+parseFloat(e.capture)/100;}
+      cLog(c,'me','Kamu menggunakan '+sk.name+'.');
+    }else{c.counterNext=true;cLog(c,'me','Kamu bersiap membalas.');}
+    afterPlayerAction(state,c);
+    return {ok:true};
+  }
+  if(sk.type==='attack'){
+    if(state.player.stamina<sk.cost)return {ok:false,msg:'Stamina kurang.'};
+    state.player.stamina-=sk.cost;
+    let def=c.enemy.def;
+    if(sk.element==='astral')def=Math.round(def*0.7);
+    let dmg=dmgCalc(state.player.atk,def,sk.power,true);
+    if(sk.id==='tebasan'&&chance(0.20))dmg=Math.round(dmg*1.5);
+    if(c.buffs.dmgDealt)dmg=Math.round(dmg*(1+c.buffs.dmgDealt));
+    applyDamageToEnemy(c,dmg);
+    cLog(c,'me',sk.name+' → '+dmg+' damage.');
+    afterPlayerAction(state,c);
+    return {ok:true};
+  }
+  return {ok:false,msg:'Skill tidak bisa dipakai.'};
+}
+function playerDefend(state,c){
+  if(c.over)return;
+  c.defending=true;
+  state.player.stamina=clamp(state.player.stamina+8,0,state.player.maxStamina);
+  cLog(c,'me','Kamu bertahan. +8 Stamina.');
+  afterPlayerAction(state,c);
+}
+function playerDodge(state,c){
+  if(c.over)return {ok:false};
+  if(state.player.stamina<10)return {ok:false,msg:'Stamina kurang.'};
+  state.player.stamina-=10;c.dodgeNext=true;
+  cLog(c,'me','Kamu bersiap menghindar.');
+  afterPlayerAction(state,c);
+  return {ok:true};
+}
+function playerCapture(state,c,extra){
+  if(c.over)return {ok:false,msg:'Combat selesai.'};
+  if(!canCapture(c))return {ok:false,msg:'HP spirit masih di atas 50%.'};
+  if(state.player.stamina<15)return {ok:false,msg:'Butuh 15 Stamina.'};
+  state.player.stamina-=15;
+  const cv=captureChance(state,c.enemy.hp,c.enemy.maxHp,c.rarity,c.enemy.level,c.enemy.type,(c.captureBuff||0)+(extra||0));
+  cLog(c,'me','Kamu mencoba mengikat '+c.enemy.name+'...');
+  if(chance(cv)){
+    cLog(c,'sys','Berhasil! '+c.enemy.name+' menjadi milikmu.');
+    return {ok:true,captured:true,chance:cv};
+  }
+  cLog(c,'sys','Gagal. ('+Math.round(cv*100)+'%)');
+  afterPlayerAction(state,c);
+  return {ok:true,captured:false,chance:cv};
+}
+function playerFlee(state,c){
+  if(c.over)return {ok:false};
+  if(state.player.stamina<5)return {ok:false,msg:'Stamina kurang.'};
+  state.player.stamina-=5;
+  const p=0.5+0.03*(state.player.level-c.enemy.level);
+  if(chance(clamp(p,0.2,0.9))){
+    cLog(c,'sys','Kamu berhasil melarikan diri.');
+    c.over=true;c.result='fled';
+    return {ok:true,fled:true};
+  }
+  cLog(c,'sys','Kamu gagal melarikan diri.');
+  afterPlayerAction(state,c);
+  return {ok:true,fled:false};
+}
+function toggleNonLethal(c){if(!c.isSpirit)return;c.nonLethal=!c.nonLethal;}
+function afterPlayerAction(state,c){
+  if(c.over)return;
+  if(c.enemy.hp<=0){endCombat(state,c,'win');return;}
+  const sp=getActive(state);
+  if(sp&&sp.hp>0){
+    let dmg=dmgCalc(sp.atk,c.enemy.def,1.0,true);
+    if(c.nonLethal&&c.enemy.hp-dmg<1)dmg=Math.max(0,c.enemy.hp-1);
+    c.enemy.hp=Math.max(0,c.enemy.hp-dmg);
+    cLog(c,'sp',sp.nickname+' menyerang → '+dmg+' damage.');
+    if(c.enemy.hp<=0){endCombat(state,c,'win');return;}
+  }
+  enemyTurn(state,c);
+}
+function enemyTurn(state,c){
+  if(c.over)return;
+  const action=c.enemy.pattern[c.enemy.patternIdx%c.enemy.pattern.length];
+  c.enemy.patternIdx++;
+  if(action==='guard'){
+    cLog(c,'foe',c.enemy.name+' menahan serangan.');
+    c.guarding = true;
+    c.turn='player';return;
+  }
+  const power=action==='heavy'?1.5:1.0;
+  if(c.dodgeNext){
+    c.dodgeNext=false;
+    if(chance(0.6)){
+      cLog(c,'foe',c.enemy.name+' menyerang — kamu menghindar!');
+      c.turn='player';c.defending=false;tickBuffs(c);return;
+    }
+    cLog(c,'foe','Kamu gagal menghindar!');
+  }
+  let dmg=dmgCalc(c.enemy.atk,state.player.def,power,true);
+  if(c.defending)dmg=Math.round(dmg*0.5);
+  if(c.buffs.defTurns>0)dmg=Math.round(dmg*(1-c.buffs.def));
+  if(c.enemy.type==='Spirit'&&state.player.skills.indexOf('spirit_resistance')>=0)dmg=Math.round(dmg*0.8);
+  dmg=Math.max(1,dmg);
+  state.player.hp=Math.max(0,state.player.hp-dmg);
+  cLog(c,'foe',c.enemy.name+' menyerang → '+dmg+' damage.');
+  if(c.counterNext){
+    c.counterNext=false;
+    let cd=dmgCalc(state.player.atk,c.enemy.def,0.8,false);
+    if(c.nonLethal&&c.enemy.hp-cd<1)cd=Math.max(0,c.enemy.hp-1);
+    c.enemy.hp=Math.max(0,c.enemy.hp-cd);
+    cLog(c,'me','Balasan → '+cd+' damage.');
+    if(c.enemy.hp<=0){endCombat(state,c,'win');return;}
+  }
+  c.defending=false;tickBuffs(c);
+  if(state.player.hp<=0){endCombat(state,c,'lose');return;}
+  c.turn='player';
+}
+function tickBuffs(c){
+  if(c.buffs.defTurns>0){c.buffs.defTurns--;if(c.buffs.defTurns===0)c.buffs.def=0;}
+  if(c.buffs.dmgTurns>0){c.buffs.dmgTurns--;if(c.buffs.dmgTurns===0)c.buffs.dmgDealt=0;}
+}
+function endCombat(state,c,result){
+  c.over=true;c.result=result;
+  if(result==='win'){
+    c.reward.xp=c.enemy.xp;c.reward.keping=c.enemy.keping;
+    cLog(c,'sys','Kemenangan! +'+c.reward.xp+' XP, +'+c.reward.keping+' Keping.');
+    addXp(state,c.reward.xp);
+    state.inventory.keping+=c.reward.keping;
+    addSpiritXp(state,Math.round(c.reward.xp*0.6));
+  }else if(result==='lose'){cLog(c,'sys','Kamu tumbang...');}
+  else if(result==='fled'){cLog(c,'sys','Kamu melarikan diri.');}
+}
+
+/* ============================================================
+   BAGIAN 3 — UI, MODAL, BOOTSTRAP, EVENT HANDLER
+   ============================================================ */
+
+/* ---------- GLOBAL STATE ---------- */
+let state = null;
+const ui = { screen:'home', combat:null };
+
+/* ---------- UI HELPERS ---------- */
+function bar(cls, val, max){
+  const p = max > 0 ? (val/max)*100 : 0;
+  return '<div class="bar '+cls+'"><div style="width:'+clamp(p,0,100)+'%"></div></div>';
+}
+function el(id){ return document.getElementById(id); }
+
+/* ---------- HEADER ---------- */
+function renderHeader(){
+  const loc = LOCATIONS[state.world.currentLocation];
+  el('header-loc').textContent = loc ? loc.name : '—';
+  el('header-night').textContent = 'Malam ' + state.world.nightCount;
+}
+
+/* ---------- SCREEN: HOME ---------- */
+function screenHome(){
+  const p = state.player;
+  const c = CLASSES[p.class];
+  const need = xpNeeded(p.level);
+  const next = p.level >= MAX_LEVEL ? 'MAX' : (p.xp + '/' + need);
+  const q = questProgress(state);
+  const active = getActive(state);
+  let html = '';
+  html += '<div class="panel">';
+  html += '<div class="row between"><div>';
+  html += '<div style="font-size:11px;color:var(--muted);letter-spacing:1px">'+esc(c.name).toUpperCase()+'</div>';
+  html += '<h1 style="margin:2px 0">'+esc(p.name)+'</h1>';
+  html += '<div class="muted">Level '+p.level+' · '+esc(c.role)+'</div>';
+  html += '</div><div style="text-align:right"><div class="stat-chip">🪙 <b>'+state.inventory.keping+'</b></div></div></div>';
+  html += '<div class="gap"></div>';
+  html += '<div class="row between"><span class="muted">HP</span><span>'+p.hp+'/'+p.maxHp+'</span></div>';
+  html += bar('hp', p.hp, p.maxHp);
+  html += '<div class="row between"><span class="muted">Stamina</span><span>'+p.stamina+'/'+p.maxStamina+'</span></div>';
+  html += bar('sta', p.stamina, p.maxStamina);
+  html += '<div class="row between"><span class="muted">XP</span><span>'+next+'</span></div>';
+  html += bar('xp', p.level>=MAX_LEVEL?1:p.xp, p.level>=MAX_LEVEL?1:need);
+  html += '</div>';
+
+  html += '<div class="panel"><h2>Quest Aktif</h2>';
+  html += '<div style="font-size:14px;font-weight:600">'+esc(q.title)+'</div>';
+  html += '<div class="muted">Langkah '+q.cur+'/'+q.total+'</div>';
+  html += '<div class="gap"></div>';
+  for(const s of q.steps){
+    const col = s.done?'var(--ok)':s.current?'var(--accent)':'var(--muted)';
+    const mark = s.done?'✓':s.current?'▶':'○';
+    const txtCol = s.done?'var(--muted)':s.current?'var(--text)':'var(--muted)';
+    html += '<div class="row" style="margin:4px 0"><span style="width:18px;color:'+col+'">'+mark+'</span>';
+    html += '<span style="font-size:13px;color:'+txtCol+'">'+esc(s.text)+'</span></div>';
+  }
+  html += '</div>';
+
+html += '<div class="panel"><h2>Lokasi Sekarang</h2>';
+  const loc = LOCATIONS[state.world.currentLocation];
+  html += '<div style="font-size:15px">'+esc(loc.name)+'</div>';
+  html += '<p class="muted">'+esc(loc.desc)+'</p>';
+  html += '<button class="btn primary" data-act="go-explore">Buka Jelajah</button>';
+  html += '</div>';
+
+  if(active){
+    html += '<div class="panel"><h2>Spirit Aktif</h2>';
+    html += '<div class="row between"><div>';
+    html += '<div style="color:var(--accent)">'+esc(active.nickname)+'</div>';
+    html += '<div class="muted">Lv '+active.level+' · '+esc(SPIRITS[active.speciesId].rarity)+'</div>';
+    html += '</div><div style="text-align:right"><div class="muted">HP</div>';
+    html += '<div>'+active.hp+'/'+active.maxHp+'</div></div></div>';
+    html += bar('hp', active.hp, active.maxHp);
+    html += '</div>';
+  }
+
+  html += '<div class="panel">';
+  html += '<button class="btn" data-act="save-game">💾 Simpan Game</button>';
+  html += '<button class="btn" data-act="export-save">📤 Ekspor Save</button>';
+  html += '<button class="btn" data-act="import-save">📥 Impor Save</button>';
+  html += '<button class="btn danger" data-act="reset-game">🗑 Reset Progress</button>';
+  html += '</div>';
+  return html;
+}
+
+/* ---------- SCREEN: EXPLORE ---------- */
+function screenExplore(){
+  const loc = getLocation(state);
+  let html = '<div class="panel"><h1>'+esc(loc.name)+'</h1>';
+  html += '<p class="muted">'+esc(loc.desc)+'</p></div>';
+
+  const actLabels = {
+    istirahat:{label:'🌙 Istirahat (pulih penuh)',act:'rest'},
+    bicara_sesepuh:{label:'🗣 Bicara Sesepuh',act:'elder'},
+    lapor_sesepuh:{label:'🗣 Lapor Sesepuh',act:'report'},
+    cari_spirit:{label:'👁 Cari Spirit',act:'search-spirit'},
+    hadapi_spirit:{label:'⚠ Hadapi Spirit di Altar',act:'face-spirit'}
+  };
+  const actions = (loc.actions||[]).slice();
+  if(loc.id==='desa' && hasFlag(state,'altar_ditemukan') && !hasFlag(state,'lapor_sesepuh')){
+    if(actions.indexOf('lapor_sesepuh')<0) actions.push('lapor_sesepuh');
+  }
+
+  if(actions.length){
+    html += '<div class="panel"><h2>Aksi</h2>';
+    for(const a of actions){
+      const meta = actLabels[a];
+      if(!meta) continue;
+      html += '<button class="btn" data-act="'+meta.act+'">'+meta.label+'</button>';
+    }
+    html += '</div>';
+  }
+
+  if(loc.points && loc.points.length){
+    html += '<div class="panel"><h2>Periksa</h2>';
+    for(const p of loc.points){
+      const done = !!state.quests.flags[p.flag];
+      html += '<button class="btn '+(done?'':'gold')+'" data-act="investigate" data-id="'+p.id+'" '+(done?'disabled':'')+'>';
+      html += (done?'✓ ':'')+esc(p.label)+'</button>';
+    }
+    html += '</div>';
+  }
+
+ if(loc.exits && loc.exits.length){
+    html += '<div class="panel"><h2>Jalan</h2>';
+    for(const e of loc.exits){
+      const chk = canEnter(state, e.to);
+      html += '<button class="btn '+(chk.ok?'':'')+'" data-act="goto" data-id="'+e.to+'" '+(chk.ok?'':'disabled')+'>';
+      html += (chk.ok?'→ ':'🔒 ')+esc(e.label);
+      if(!chk.ok) html += '<div class="muted" style="margin-top:2px">'+esc(chk.reason)+'</div>';
+      html += '</button>';
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+/* ---------- SCREEN: QUEST ---------- */
+function screenQuest(){
+  const q = currentQuest(state);
+  if(!q) return '<div class="empty">Tidak ada quest aktif.</div>';
+  const prog = questProgress(state);
+  let html = '<div class="panel"><h1>'+esc(q.title)+'</h1>';
+  html += '<p class="muted">'+esc(q.desc)+'</p></div>';
+  html += '<div class="panel"><h2>Langkah</h2>';
+  for(const s of prog.steps){
+    const col = s.done?'var(--ok)':s.current?'var(--accent)':'var(--muted)';
+    const mark = s.done?'✓':s.current?'▶':'○';
+    const txtCol = s.done?'var(--muted)':s.current?'var(--text)':'var(--muted)';
+    html += '<div class="row" style="padding:8px 0;border-bottom:1px solid var(--line)">';
+    html += '<span style="width:22px;color:'+col+'">'+mark+'</span>';
+    html += '<span style="flex:1;font-size:13px;color:'+txtCol+'">'+esc(s.text)+'</span>';
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+/* ---------- SCREEN: INVENTORY ---------- */
+function screenInventory(){
+  const inv = state.inventory;
+  const groups = {weapon:[],armor:[],artifact:[],book:[],item:[],quest:[],spirit:[]};
+  for(const inst of inv.items){
+    const d = ITEMS[inst.id];
+    if(!d) continue;
+    (groups[d.kind]||groups.item).push({inst:inst, def:d});
+  }
+  const isEq = function(u){
+    return Object.keys(inv.equip).some(k=>inv.equip[k]===u);
+  };
+  function groupHtml(title, arr){
+    if(!arr.length) return '';
+    let h = '<div class="panel tight">';
+    h += '<div class="row between"><h2>'+title+'</h2><span class="muted">'+arr.length+'</span></div>';
+    for(const o of arr){
+      const eq = isEq(o.inst.uid);
+      h += '<div class="item-row" data-act="item-detail" data-uid="'+o.inst.uid+'">';
+      h += '<div class="item-ico">'+(o.def.ico||'◈')+'</div>';
+      h += '<div class="item-body"><div class="item-name">'+esc(o.def.name);
+      if(o.inst.qty>1) h += ' <span class="muted">×'+o.inst.qty+'</span>';
+      h += '</div><div class="item-sub">'+esc(o.def.desc||'');
+      if(eq) h += ' · <span style="color:var(--accent)">Terpakai</span>';
+      h += '</div></div></div>';
+    }
+    h += '</div>';
+    return h;
+  }
+  let html = '<div class="panel"><div class="row between"><h1>Inventori</h1>';
+  html += '<div class="stat-chip">🪙 <b>'+inv.keping+'</b></div></div></div>';
+  html += groupHtml('Senjata', groups.weapon);
+  html += groupHtml('Armor', groups.armor);
+  html += groupHtml('Artefak', groups.artifact);
+  html += groupHtml('Buku', groups.book);
+  html += groupHtml('Item Pakai', groups.item);
+  html += groupHtml('Item Quest', groups.quest);
+  if(!inv.items.length) html += '<div class="empty">Inventori kosong.</div>';
+  return html;
+}
+
+/* ---------- SCREEN: SPIRIT ---------- */
+function screenSpirit(){
+  const list = state.spirits;
+  let html = '<div class="panel"><h1>Spirit Companion</h1>';
+  html += '<div class="muted">'+list.length+' spirit dimiliki</div></div>';
+  if(!list.length){
+    html += '<div class="empty">Belum ada spirit.<br>Cari dan ikat spirit lewat eksplorasi.</div>';
+    return html;
+  }
+  for(const s of list){
+    const sp = SPIRITS[s.speciesId];
+    if(!sp) continue;
+    const isActive = s.uid === state.activeSpiritId;
+    const rar = sp.rarity.toLowerCase();
+    html += '<div class="panel">';
+    html += '<div class="row between"><div>';
+    html += '<div style="font-size:15px;font-weight:600">'+esc(s.nickname);
+    if(isActive) html += ' <span style="color:var(--accent)">●AKTIF</span>';
+    html += '</div>';
+    html += '<div class="muted">'+esc(sp.name)+' · Lv '+s.level+' · ';
+    html += '<span class="rarity-'+rar+'">'+esc(sp.rarity)+'</span> · '+esc(sp.type)+'</div>';
+    html += '</div></div>';
+    html += '<div class="gap"></div>';
+    html += '<div class="row between"><span class="muted">HP</span><span>'+s.hp+'/'+s.maxHp+'</span></div>';
+    html += bar('hp', s.hp, s.maxHp);
+    html += '<div class="stat-row">';
+    html += '<span class="stat-chip">ATK <b>'+s.atk+'</b></span>';
+    html += '<span class="stat-chip">DEF <b>'+s.def+'</b></span>';
+    html += '<span class="stat-chip">XP <b>'+s.xp+'/'+xpNeeded(s.level)+'</b></span>';
+    html += '</div>';
+    html += '<div class="gap"></div>';
+    html += '<div class="btn-row">';
+    html += '<button class="btn small '+(isActive?'':'primary')+'" data-act="spirit-set-active" data-uid="'+s.uid+'">'+(isActive?'Lepas Aktif':'Jadikan Aktif')+'</button>';
+    html += '<button class="btn small gold" data-act="spirit-rename" data-uid="'+s.uid+'">Rename</button>';
+    html += '<button class="btn small ok" data-act="spirit-upgrade" data-uid="'+s.uid+'">Upgrade ('+upgradeCost(s)+'🪙)</button>';
+    html += '</div></div>';
+  }
+  return html;
+}
+
+/* ---------- SCREEN: JOURNAL ---------- */
+function screenJournal(){
+  const j = state.journal;
+  function list(arr, fn){
+    if(!arr.length) return '<div class="muted">— belum ada —</div>';
+    return arr.map(fn).join('');
+  }
+  let html = '<div class="panel"><h1>Journal</h1>';
+  html += '<div class="muted">Catatan perjalananmu.</div></div>';
+  html += '<div class="panel"><h2>Petunjuk Ditemukan</h2>';
+  html += list(j.clues, id=>'<div style="padding:6px 0;border-bottom:1px solid var(--line)">• '+esc(String(id).replace(/_/g,' '))+'</div>');
+  html += '</div>';
+  html += '<div class="panel"><h2>Buku Dibaca</h2>';
+  html += list(j.booksRead, id=>'<div style="padding:6px 0;border-bottom:1px solid var(--line)">📖 '+esc(ITEMS[id]?ITEMS[id].name:id)+'</div>');
+  html += '</div>';
+  html += '<div class="panel"><h2>Lokasi Dikunjungi</h2>';
+  html += list(j.locationsFound, id=>'<div style="padding:6px 0;border-bottom:1px solid var(--line)">🗺 '+esc(LOCATIONS[id]?LOCATIONS[id].name:id)+'</div>');
+  html += '</div>';
+  html += '<div class="panel"><h2>Spirit Dilihat</h2>';
+  html += list(j.spiritsSeen, id=>'<div style="padding:6px 0;border-bottom:1px solid var(--line)">✦ '+esc(SPIRITS[id]?SPIRITS[id].name:id)+'</div>');
+  html += '</div>';
+  html += '<div class="panel"><h2>Spirit Diikat</h2>';
+  html += list(j.spiritsCaught, id=>'<div style="padding:6px 0;border-bottom:1px solid var(--line)">◈ '+esc(SPIRITS[id]?SPIRITS[id].name:id)+'</div>');
+  html += '</div>';
+  return html;
+}
+
+/* ---------- SCREEN: CHARACTER ---------- */
+function screenCharacter(){
+  const p = state.player;
+  const c = CLASSES[p.class];
+  let html = '<div class="panel"><h1>'+esc(p.name)+'</h1>';
+  html += '<div class="muted">'+esc(c.name)+' · '+esc(c.role)+'</div>';
+  html += '<p style="margin-top:8px">'+esc(c.desc)+'</p>';
+  html += '<p class="muted" style="font-style:italic">"'+esc(c.loreNote)+'"</p></div>';
+  html += '<div class="panel"><h2>Statistik</h2>';
+  html += '<div class="stat-row"><span class="grow">Level</span><b>'+p.level+'</b></div>';
+  html += '<div class="stat-row"><span class="grow">XP</span><b>'+p.xp+'/'+xpNeeded(p.level)+'</b></div>';
+  html += '<div class="stat-row"><span class="grow">HP</span><b>'+p.hp+'/'+p.maxHp+'</b></div>';
+  html += '<div class="stat-row"><span class="grow">Stamina</span><b>'+p.stamina+'/'+p.maxStamina+'</b></div>';
+  html += '<div class="stat-row"><span class="grow">ATK</span><b>'+p.atk+'</b></div>';
+  html += '<div class="stat-row"><span class="grow">DEF</span><b>'+p.def+'</b></div>';
+  html += '<div class="stat-row"><span class="grow">Lore Knowledge</span><b>'+p.loreKnowledge+'</b></div>';
+  html += '<div class="stat-row"><span class="grow">Reputasi</span><b>'+p.reputation+'</b></div>';
+  html += '<div class="stat-row"><span class="grow">Skill Point</span><b>'+p.skillPoints+'</b></div>';
+  html += '</div>';
+  html += '<div class="panel"><h2>Skill Diketahui</h2>';
+  if(!p.skills.length){
+    html += '<div class="muted">Belum ada.</div>';
+  } else {
+    for(const id of p.skills){
+      const sk = SKILLS[id]; if(!sk) continue;
+      html += '<div class="item-row" style="cursor:default"><div class="item-ico">✦</div>';
+      html += '<div class="item-body"><div class="item-name">'+esc(sk.name)+'</div>';
+      html += '<div class="item-sub">'+esc(sk.desc||'')+'</div></div></div>';
+    }
+  }
+  if(p.skillPoints > 0){
+    html += '<button class="btn primary" data-act="spend-skill-point">Gunakan Skill Point ('+p.skillPoints+')</button>';
+  }
+  html += '</div>';
+  return html;
+}
+
+/* ---------- SCREEN: COMBAT ---------- */
+function screenCombat(){
+  const c = ui.combat;
+  if(!c) return '<div class="empty">Combat tidak aktif.</div>';
+  const en = c.enemy;
+  const p = state.player;
+  const chanceVal = c.isSpirit ? captureChance(state,en.hp,en.maxHp,c.rarity,en.level,en.type,c.captureBuff||0) : 0;
+
+  let html = '<div class="enemy-card">';
+  html += '<div class="enemy-tag">'+esc(en.type)+(c.isSpirit?' · '+esc(c.rarity):'')+'</div>';
+  html += '<div class="enemy-name">'+esc(en.name)+'</div>';
+  html += '<div class="muted">Lv '+en.level+'</div>';
+  html += bar('enemy', en.hp, en.maxHp);
+  html += '<div class="muted">'+en.hp+'/'+en.maxHp+' HP</div>';
+  if(c.isSpirit){
+    html += '<div class="muted" style="margin-top:4px">Mode ';
+    html += c.nonLethal ? '<span style="color:var(--ok)">Non-Lethal</span>' : '<span style="color:var(--danger)">Lethal</span>';
+    html += ' <button class="btn small" data-act="c-toggle-lethal" style="margin-left:6px">Toggle</button></div>';
+  }
+  html += '</div>';
+
+  html += '<div class="panel tight">';
+  html += '<div class="row between"><span class="muted">'+esc(p.name)+' Lv '+p.level+'</span><span>'+p.hp+'/'+p.maxHp+' HP</span></div>';
+  html += bar('hp', p.hp, p.maxHp);
+  html += '<div class="row between"><span class="muted">Stamina</span><span>'+p.stamina+'/'+p.maxStamina+'</span></div>';
+  html += bar('sta', p.stamina, p.maxStamina);
+  html += '</div>';
+
+  html += '<div class="combat-log" id="combat-log">';
+  for(const l of c.log){
+    html += '<div class="'+l.t+'">'+esc(l.m)+'</div>';
+  }
+  html += '</div>';
+
+  if(c.over){
+    html += '<div class="gap"></div>';
+    html += '<div class="panel"><h2>'+(c.result==='win'?'Kemenangan':c.result==='fled'?'Kabur':'Tumbang')+'</h2>';
+    html += '<button class="btn primary" data-act="c-close">Lanjut</button></div>';
+  } else {
+    html += '<div class="gap"></div>';
+    html += '<button class="btn primary" data-act="c-attack">⚔ Serang (0 sta)</button>';
+    html += '<button class="btn" data-act="c-skill-menu">✦ Skill</button>';
+    html += '<button class="btn ok" data-act="c-defend">🛡 Bertahan (+8 sta)</button>';
+    html += '<button class="btn" data-act="c-dodge">💨 Dodge (10 sta)</button>';
+    if(c.isSpirit){
+      const capOk = canCapture(c);
+      const capTxt = capOk ? ('🔗 Keep Spirit ('+Math.round(chanceVal*100)+'%)') : '🔗 Keep Spirit (HP>50%)';
+      html += '<button class="btn gold" data-act="c-capture" '+(capOk?'':'disabled')+'>'+capTxt+'</button>';
+    }
+    html += '<button class="btn" data-act="c-flee">🏃 Kabur (5 sta)</button>';
+  }
+  return html;
+}
+
+/* ---------- MODAL SYSTEM ---------- */
+const modalStack = [];
+function openModal(opts){
+  const root = el('modal-root');
+  root.classList.add('show');
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  let html = '';
+  if(opts.title) html += '<div class="modal-title">'+esc(opts.title)+'</div>';
+  html += '<div class="modal-body">'+(opts.body||'')+'</div>';
+  html += '<div class="modal-actions"></div>';
+  modal.innerHTML = html;
+  const actionsEl = modal.querySelector('.modal-actions');
+  (opts.actions||[]).forEach(function(a){
+    const b = document.createElement('button');
+    b.className = 'btn ' + (a.cls||'');
+    b.textContent = a.label;
+    b.addEventListener('click', function(){
+      TG.haptic('light');
+      if(a.keep !== true) closeModal();
+      if(a.onClick) a.onClick();
+    });
+    actionsEl.appendChild(b);
+  });
+  const bg = document.createElement('div');
+  bg.className = 'modal-bg';
+  bg.addEventListener('click', function(){
+    if(!modal.dataset.locked) closeModal();
+  });
+  root.appendChild(bg);
+  root.appendChild(modal);
+  modalStack.push({el:modal, bg:bg});
+}
+function closeModal(){
+  const root = el('modal-root');
+  const top = modalStack.pop();
+  if(top){ top.el.remove(); top.bg.remove(); }
+  if(!modalStack.length) root.classList.remove('show');
+}
+function closeAllModals(){
+  while(modalStack.length) closeModal();
+  el('modal-root').classList.remove('show');
+}
+function toast(msg, type){
+  const root = el('toast-root');
+  const t = document.createElement('div');
+  t.className = 'toast' + (type?' '+type:'');
+  t.textContent = msg;
+  root.appendChild(t);
+  setTimeout(function(){ t.style.opacity='0'; t.style.transition='opacity .3s'; }, 1800);
+  setTimeout(function(){ t.remove(); }, 2200);
+}
+function confirmDialog(title, msg, onYes, yesLabel, noLabel){
+  openModal({
+    title: title,
+    body: '<p>'+esc(msg)+'</p>',
+    actions: [
+      {label: noLabel||'Batal', cls:''},
+      {label: yesLabel||'Ya', cls:'primary', onClick: onYes}
+    ]
+  });
+}
+
+/* ---------- SCREEN ROUTER ---------- */
+function setActiveTab(name){
+  const tabs = document.querySelectorAll('#bottom-nav button');
+  for(const b of tabs){
+    b.classList.toggle('active', b.dataset.tab === name);
+  }
+}
+function showScreen(name){
+  ui.screen = name;
+  closeAllModals();
+  renderScreen();
+  setActiveTab(name);
+  TG.backButton(name !== 'home', handleBack);
+}
+function handleBack(){
+  if(ui.combat && !ui.combat.over) return;
+  if(ui.screen !== 'home') showScreen('home');
+}
+function renderScreen(){
+  renderHeader();
+  const elScreen = el('screen');
+  let html = '';
+  switch(ui.screen){
+    case 'home': html = screenHome(); break;
+    case 'explore': html = screenExplore(); break;
+    case 'quest': html = screenQuest(); break;
+    case 'inventory': html = screenInventory(); break;
+    case 'spirit': html = screenSpirit(); break;
+    case 'journal': html = screenJournal(); break;
+    case 'character': html = screenCharacter(); break;
+    case 'combat': html = screenCombat(); break;
+  }
+  elScreen.innerHTML = html;
+  if(ui.screen === 'combat'){
+    const logEl = el('combat-log');
+    if(logEl) logEl.scrollTop = logEl.scrollHeight;
+  }
+}
+
+/* ---------- SKILL MENU ---------- */
+function showSkillMenu(){
+  const c = ui.combat;
+  const p = state.player;
+  const list = p.skills.filter(function(id){
+    const sk = SKILLS[id];
+    return sk && sk.type !== 'passive';
+  });
+  let body = '';
+  if(!list.length) body = '<div class="empty">Tidak ada skill aktif.</div>';
+  else {
+    body = list.map(function(id){
+      const sk = SKILLS[id];
+      const disabled = p.stamina < sk.cost;
+      return '<button class="btn '+(disabled?'':'gold')+'" data-skill="'+id+'" '+(disabled?'disabled':'')+'>'+
+        esc(sk.name)+' <span class="muted">· '+sk.cost+' sta · '+esc(sk.desc||'')+'</span></button>';
+    }).join('');
+  }
+  body += '<button class="btn" id="sk-cancel">Batal</button>';
+  openModal({ title:'Pilih Skill', body: body });
+  document.querySelectorAll('[data-skill]').forEach(function(b){
+    b.onclick = function(){
+      const id = b.dataset.skill;
+      closeModal();
+      const r = playerSkill(state, ui.combat, id);
+      if(r && r.ok === false){ toast(r.msg, 'err'); return; }
+      autosave(); renderScreen(); checkCombatEnd();
+    };
+  });
+  const cancel = el('sk-cancel');
+  if(cancel) cancel.onclick = function(){ closeModal(); };
+}
+
+/* ---------- SKILL LEARN ---------- */
+function showSkillLearnModal(){
+  const p = state.player;
+  const c = CLASSES[p.class];
+  const avail = c.skills.filter(function(id){ return p.skills.indexOf(id) < 0; });
+  let body = '<p class="muted">Pilih skill (biaya 1 Skill Point).</p>';
+  if(!avail.length){
+    body = '<div class="empty">Semua skill class sudah dipelajari.</div>';
+  } else {
+    body = avail.map(function(id){
+      const sk = SKILLS[id];
+      return '<button class="btn gold" data-learn="'+id+'"><b>'+esc(sk.name)+'</b>'+
+        '<div class="muted" style="margin-top:3px">'+esc(sk.desc||'')+'</div></button>';
+    }).join('');
+  }
+  openModal({ title:'Belajar Ilmu', body: body, actions:[{label:'Tutup'}] });
+  document.querySelectorAll('[data-learn]').forEach(function(b){
+    b.onclick = function(){
+      const id = b.dataset.learn;
+      if(p.skillPoints < 1){ toast('Skill Point tidak cukup.', 'err'); return; }
+      p.skillPoints--;
+      p.skills.push(id);
+      autosave(); closeModal(); renderScreen();
+      toast(SKILLS[id].name + ' dipelajari.', 'ok');
+    };
+  });
+}
+
+/* ---------- NEW GAME MODAL ---------- */
+function showNewGameModal(){
+  const tgUser = TG.user();
+  const defaultName = tgUser ? tgUser.firstName : '';
+  let body = '<p class="muted">BhuanaKamaya — malam panjang menantimu.</p>';
+  body += '<label class="muted">Nama</label>';
+  body += '<input id="ng-name" maxlength="16" placeholder="Nama pemain" value="'+esc(defaultName)+'">';
+  body += '<div class="gap"></div>';
+  body += '<label class="muted">Pilih Class</label>';
+  body += '<div id="ng-class-list">';
+  for(const key in CLASSES){
+    const c = CLASSES[key];
+    const prim = (key === 'DUKUN') ? ' primary' : '';
+    body += '<button class="btn'+prim+'" data-ng-class="'+c.id+'">';
+    body += '<b>'+esc(c.name)+'</b> <span class="muted">· '+esc(c.role)+'</span>';
+    body += '<div class="muted" style="margin-top:3px">'+esc(c.desc)+'</div></button>';
+  }
+  body += '</div>';
+  openModal({
+    title: 'Mulai Perjalanan Baru',
+    body: body,
+    actions: [{
+      label:'Mulai', cls:'primary', keep:true,
+      onClick: function(){
+        const nameEl = el('ng-name');
+        const name = (nameEl.value||'').trim().slice(0,16) || 'Tanpa Nama';
+        const sel = document.querySelector('[data-ng-class].primary');
+        const cls = sel ? sel.dataset.ngClass : 'DUKUN';
+        startNewGame(cls, name);
+      }
+    }]
+  });
+  document.querySelectorAll('[data-ng-class]').forEach(function(b){
+    b.onclick = function(){
+      TG.haptic('light');
+      document.querySelectorAll('[data-ng-class]').forEach(function(x){ x.classList.remove('primary'); });
+      b.classList.add('primary');
+    };
+  });
+}
+
+function startNewGame(classId, name){
+  state = createNewState(classId, name);
+  const c = CLASSES[classId];
+  for(const sk of c.startSkills){
+    if(state.player.skills.indexOf(sk) < 0) state.player.skills.push(sk);
+  }
+  for(const it of c.startItems){ addItem(state, it, 1); }
+  for(const inst of state.inventory.items){
+    const d = ITEMS[inst.id];
+    if(d && (d.kind==='weapon' || d.kind==='armor')) equipItem(state, inst.uid);
+  }
+  recalcStats(state);
+  state.player.hp = state.player.maxHp;
+  state.player.stamina = state.player.maxStamina;
+  tryAdvance(state, null, function(m){ toast(m,'ok'); });
+  saveGame(state);
+  closeAllModals();
+  showScreen('home');
+  toast('Selamat datang, '+name+'.', 'ok');
+}
+
+/* ---------- ACTION HANDLER ---------- */
+function handleAction(act, data){
+  TG.haptic('light');
+  switch(act){
+    case 'go-explore': showScreen('explore'); break;
+
+    /* ----- EXPLORE ----- */
+    case 'goto': {
+      const r = enterLocation(state, data.id, function(m){ toast(m,'ok'); });
+      if(!r.ok){ toast(r.msg, 'err'); return; }
+      autosave();
+      showScreen('explore');
+      break;
+    }
+    case 'investigate': {
+      const r = investigate(state, data.id, function(m){ toast(m,'ok'); });
+      if(!r.ok){ toast(r.msg, 'err'); return; }
+      autosave();
+      if(hasFlag(state,'petunjuk_lengkap')){
+        const rm = LOCATIONS.rumah_kosong;
+        if(!rm.exits.find(function(e){ return e.to==='ruang_bawah_tanah'; })){
+          rm.exits.push({ to:'ruang_bawah_tanah', label:'Turun ke Bawah Tanah' });
+        }
+      }
+      showScreen('explore');
+      openModal({
+        title: 'Petunjuk',
+        body: '<p>'+esc(r.text||'')+'</p>',
+        actions: [{label:'OK', cls:'primary'}]
+      });
+      break;
+    }
+    case 'rest': {
+      restAtVillage(state);
+      restAllSpirits(state);
+      autosave();
+      toast('Istirahat. HP, Stamina, dan spirit pulih.', 'ok');
+      showScreen('explore');
+      break;
+    }
+    case 'elder': {
+      if(!hasFlag(state, 'quest_diterima')){
+        openModal({
+          title:'Sesepuh Desa',
+          body:'<p>"Ada rumah kosong di tepi desa. Lilin menyala sendiri di sana. Tolong periksa."</p><p class="muted">Kau menerima tugas.</p>',
+          actions:[{label:'Terima', cls:'primary', onClick:function(){
+            setFlag(state, 'quest_diterima');
+            tryAdvance(state, 'bicara_sesepuh', function(m){ toast(m,'ok'); });
+            autosave();
+            showScreen('explore');
+          }}]
+        });
+      } else if(hasFlag(state, 'altar_ditemukan') && !hasFlag(state, 'lapor_sesepuh')){
+        setFlag(state, 'lapor_sesepuh');
+        tryAdvance(state, 'lapor_sesepuh', function(m){ toast(m,'ok'); });
+        autosave();
+        openModal({
+          title:'Laporan',
+          body:'<p>"Arwah penunggu altar telah kutemui."</p><p class="muted">"Kau berhasil. Simpan amulet ini."</p>',
+          actions:[{label:'Terima Amulet', cls:'primary'}]
+        });
+      } else {
+        toast('"Hati-hati di luar sana."');
+      }
+      break;
+    }
+    case 'report': {
+      setFlag(state, 'lapor_sesepuh');
+      tryAdvance(state, 'lapor_sesepuh', function(m){ toast(m,'ok'); });
+      autosave();
+      openModal({
+        title:'Laporan kepada Sesepuh',
+        body:'<p>Kau melaporkan apa yang kau temui.</p><p class="muted">"Kau membawa arwah itu bersamamu... kuat. Tapi hati-hati."</p>',
+        actions:[{label:'Selesai', cls:'primary'}]
+      });
+      showScreen('explore');
+      break;
+    }
+    case 'search-spirit': {
+      const r = searchSpirit(state);
+      if(!r.ok){ toast(r.msg, 'err'); return; }
+      if(!r.found){ toast(r.msg); return; }
+      ui.combat = startSpiritCombat(state, r.speciesId, false);
+      if(!ui.combat){ toast('Gagal memulai combat.', 'err'); return; }
+      showScreen('combat');
+      break;
+    }
+    case 'face-spirit': {
+      if(hasFlag(state, 'spirit_pertama')){
+        toast('Arwah di altar sudah kau ikat.');
+        return;
+      }
+      ui.combat = startSpiritCombat(state, 'arwah_penunggu', true);
+      if(!ui.combat){ toast('Gagal memulai combat.', 'err'); return; }
+      autosave();
+      showScreen('combat');
+      break;
+    }
+
+   /* ----- INVENTORY ----- */
+    case 'item-detail': {
+      const u = data.uid;
+      const inst = state.inventory.items.find(function(x){ return x.uid === u; });
+      if(!inst) return;
+      const d = ITEMS[inst.id];
+      if(!d) return;
+      const isEq = Object.keys(state.inventory.equip).some(function(k){ return state.inventory.equip[k]===u; });
+      const actions = [];
+      if(d.kind === 'weapon' || d.kind === 'armor' || d.kind === 'artifact'){
+        if(isEq){
+          actions.push({ label:'Lepas', onClick:function(){
+            for(const k of Object.keys(state.inventory.equip)){
+              if(state.inventory.equip[k]===u){ unequipSlot(state,k); break; }
+            }
+            autosave(); renderScreen();
+          }});
+        } else {
+          actions.push({ label:'Pakai', cls:'primary', onClick:function(){
+            equipItem(state, u);
+            autosave(); renderScreen();
+            toast('Dipakai.', 'ok');
+          }});
+        }
+      }
+      if(d.kind === 'item' && d.use){
+        actions.push({ label:'Gunakan', cls:'ok', onClick:function(){
+          const r = useConsumable(state, u);
+          autosave(); renderScreen();
+          toast(r.msg, r.ok ? 'ok' : 'err');
+        }});
+      }
+      if(d.kind === 'book'){
+        actions.push({ label:'Baca', cls:'gold', onClick:function(){
+          const r = readBook(state, u);
+          autosave(); renderScreen();
+          toast(r.msg, r.ok ? 'ok' : 'err');
+        }});
+      }
+      actions.push({ label:'Tutup' });
+      let body = '<p class="muted">'+esc(d.desc||'')+'</p><div class="stat-row">';
+      if(d.atk) body += '<span class="stat-chip">ATK <b>+'+d.atk+'</b></span>';
+      if(d.def) body += '<span class="stat-chip">DEF <b>+'+d.def+'</b></span>';
+      if(d.lore) body += '<span class="stat-chip">Lore <b>+'+d.lore+'</b></span>';
+      if(d.spiritBonus) body += '<span class="stat-chip">Keep <b>+'+Math.round(d.spiritBonus*100)+'%</b></span>';
+      body += '</div>';
+      openModal({ title: d.name, body: body, actions: actions });
+      break;
+    }
+
+    /* ----- SPIRIT ----- */
+    case 'spirit-set-active': {
+      const u = data.uid;
+      if(state.activeSpiritId === u){ setActiveSpirit(state, null); toast('Spirit dilepas.'); }
+      else { setActiveSpirit(state, u); toast('Spirit aktif.', 'ok'); }
+      autosave(); renderScreen();
+      break;
+    }
+    case 'spirit-rename': {
+      const u = data.uid;
+      const s = state.spirits.find(function(x){ return x.uid === u; });
+      if(!s) return;
+      openModal({
+        title:'Ganti Nama Spirit',
+        body:'<input id="rn-name" maxlength="20" value="'+esc(s.nickname)+'">',
+        actions:[
+          {label:'Batal'},
+          {label:'Simpan', cls:'primary', keep:true, onClick:function(){
+            const v = el('rn-name').value;
+            if(renameSpirit(state, u, v)){
+              autosave(); closeModal(); renderScreen();
+              toast('Nama diganti.', 'ok');
+            } else toast('Nama tidak valid.', 'err');
+          }}
+        ]
+      });
+      break;
+    }
+    case 'spirit-upgrade': {
+      const u = data.uid;
+      const r = upgradeSpirit(state, u);
+      autosave(); renderScreen();
+      toast(r.msg, r.ok ? 'ok' : 'err');
+      break;
+    }
+
+    /* ----- CHARACTER ----- */
+    case 'spend-skill-point': {
+      showSkillLearnModal();
+      break;
+    }
+
+    /* ----- SAVE ----- */
+    case 'save-game': {
+      if(saveGame(state)) toast('Progress disimpan.', 'ok');
+      else toast('Gagal menyimpan.', 'err');
+      break;
+    }
+    case 'export-save': {
+      const json = exportSave(state);
+      openModal({
+        title:'Ekspor Save',
+        body:'<p class="muted">Salin teks di bawah, simpan di tempat aman.</p><textarea id="ex-json" rows="8" readonly>'+esc(json)+'</textarea>',
+        actions:[
+          {label:'Salin', cls:'primary', keep:true, onClick:function(){
+            const ta = el('ex-json');
+            ta.select();
+            try{ document.execCommand('copy'); toast('Tersalin ke clipboard.', 'ok'); }
+            catch(e){ toast('Gagal menyalin. Salin manual.', 'err'); }
+          }},
+          {label:'Tutup'}
+        ]
+      });
+      break;
+    }
+    case 'import-save': {
+      openModal({
+        title:'Impor Save',
+        body:'<p class="muted">Tempel JSON save lama.</p><textarea id="im-json" rows="8" placeholder=\'{"version":1,...}\'></textarea>',
+        actions:[
+          {label:'Batal'},
+          {label:'Impor', cls:'primary', keep:true, onClick:function(){
+            const v = el('im-json').value;
+            const s = importSave(v);
+            if(s){
+              state = s;
+              recalcStats(state);
+              saveGame(state);
+              closeAllModals();
+              showScreen('home');
+              toast('Save berhasil diimpor.', 'ok');
+            } else toast('JSON tidak valid.', 'err');
+          }}
+        ]
+      });
+      break;
+    }
+    case 'reset-game': {
+      confirmDialog('Reset Progress', 'Semua progress akan dihapus. Tidak bisa dibatalkan.', function(){
+        resetSave();
+        state = null;
+        closeAllModals();
+        showNewGameModal();
+      }, 'Reset', 'Batal');
+      break;
+    }
+
+    /* ----- COMBAT ----- */
+    case 'c-attack': {
+      if(!ui.combat || ui.combat.over) return;
+      playerAttack(state, ui.combat);
+      autosave(); renderScreen(); checkCombatEnd();
+      break;
+    }
+    case 'c-skill-menu': {
+      showSkillMenu();
+      break;
+    }
+    case 'c-defend': {
+      playerDefend(state, ui.combat);
+      autosave(); renderScreen(); checkCombatEnd();
+      break;
+    }
+    case 'c-dodge': {
+      const r = playerDodge(state, ui.combat);
+      if(r && r.ok === false){ toast(r.msg, 'err'); return; }
+      autosave(); renderScreen(); checkCombatEnd();
+      break;
+    }
+    case 'c-capture': {
+      const c = ui.combat;
+      const r = playerCapture(state, c, 0);
+      if(r && r.ok === false){ toast(r.msg, 'err'); return; }
+      if(r.captured){
+        const inst = addSpirit(state, c.speciesId, c.enemy.level);
+        if(inst && !state.activeSpiritId) setActiveSpirit(state, inst.uid);
+        // Reward combat
+        addXp(state, c.reward.xp || c.enemy.xp);
+        state.inventory.keping += (c.reward.keping || c.enemy.keping);
+        addSpiritXp(state, Math.round((c.reward.xp || c.enemy.xp) * 0.6));
+        c.over = true; c.result = 'win';
+        cLog(c, 'sys', 'Kemenangan! +'+(c.reward.xp||c.enemy.xp)+' XP, +'+(c.reward.keping||c.enemy.keping)+' Keping.');
+        // Trigger quest
+        tryAdvance(state, 'combat_win:'+c.enemy.id, function(m){ toast(m,'ok'); });
+        tryAdvance(state, 'spirit_caught:'+c.speciesId, function(m){ toast(m,'ok'); });
+        autosave(); renderScreen();
+        toast((inst?inst.nickname:c.enemy.name)+' menjadi companion-mu!', 'ok');
+        return;
+      }
+      autosave(); renderScreen(); checkCombatEnd();
+      break;
+    }
+    case 'c-flee': {
+      const r = playerFlee(state, ui.combat);
+      if(r && r.ok === false){ toast(r.msg, 'err'); return; }
+      autosave(); renderScreen(); checkCombatEnd();
+      break;
+    }
+    case 'c-toggle-lethal': {
+      toggleNonLethal(ui.combat);
+      renderScreen();
+      break;
+    }
+    case 'c-close': {
+      ui.combat = null;
+      autosave();
+      showScreen('home');
+      break;
+    }
+  }
+}
+
+/* ---------- COMBAT END CHECK ---------- */
+function checkCombatEnd(){
+  const c = ui.combat;
+  if(!c || !c.over) return;
+  if(c.result === 'win'){
+    // Trigger quest combat_win (menggunakan enemy.id)
+    tryAdvance(state, 'combat_win:'+c.enemy.id, function(m){ toast(m,'ok'); });
+    // Jika spirit dan belum di-capture, spirit buyar (bisa muncul lagi nanti)
+  } else if(c.result === 'lose'){
+    state.player.hp = Math.max(1, Math.round(state.player.maxHp * 0.3));
+    state.world.currentLocation = 'desa';
+    const loss = Math.floor(state.player.xp * 0.1);
+    state.player.xp = Math.max(0, state.player.xp - loss);
+  }
+  autosave();
+}
+
+/* ---------- AUTOSAVE ---------- */
+function autosave(){ if(state) saveGame(state); }
+
+/* ---------- BOOTSTRAP ---------- */
+function attachHandlers(){
+  const tabs = document.querySelectorAll('#bottom-nav button');
+  for(const b of tabs){
+    b.onclick = function(){
+      if(ui.combat && !ui.combat.over){ toast('Selesaikan combat dulu.'); return; }
+      TG.haptic('light');
+      showScreen(b.dataset.tab);
+    };
+  }
+  el('btn-journal').onclick = function(){
+    if(ui.combat && !ui.combat.over) return;
+    TG.haptic('light');
+    showScreen('journal');
+  };
+  el('btn-char').onclick = function(){
+    if(ui.combat && !ui.combat.over) return;
+    TG.haptic('light');
+    showScreen('character');
+  };
+  el('screen').onclick = function(e){
+    const btn = e.target.closest('[data-act]');
+    if(!btn) return;
+    handleAction(btn.dataset.act, btn.dataset);
+  };
+}
+
+function boot(){
+  TG.init();
+  const existing = loadGame();
+  if(existing){
+    state = existing;
+    recalcStats(state);
+    showScreen('home');
+    attachHandlers();
+    toast('Progress dimuat.', 'ok');
+  } else {
+    attachHandlers();
+    showNewGameModal();
+  }
+}
+
+window.addEventListener('error', function(e){
+  var el = document.getElementById('screen');
+  if(el) el.innerHTML = '<div style="padding:20px;color:#f88;font-size:12px;font-family:monospace;white-space:pre-wrap;">ERROR:\n'+(e.message||'')+'\n'+(e.filename||'')+':'+(e.lineno||'')+'</div>';
+});
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  setTimeout(boot, 0);
+}
+window.addEventListener('beforeunload', function(){ if(state) saveGame(state); });
+
+})();
+
